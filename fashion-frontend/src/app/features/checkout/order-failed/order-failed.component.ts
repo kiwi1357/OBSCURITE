@@ -7,7 +7,7 @@ import { LanguageService } from '../../../core/services/language.service';
 @Component({
   selector: 'app-order-failed',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './order-failed.component.html',
   styleUrls: ['./order-failed.component.scss'] // Can reuse or adapt success page styles
 })

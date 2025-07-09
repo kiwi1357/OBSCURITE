@@ -1,41 +1,46 @@
 // src/styles/_variables.scss
 
-// ---------------------------
-// COLOR PALETTE
-// ---------------------------
+// === Colors ===
+// Primary Palette
+$color-primary: #000000;
+$color-white: #ffffff;
+$color-accent-red: #d30813;
 
-// Using CSS variables for easier use across the app and potential theming
-:root {
-  // Main Theme Colors
-  --primary-color: #b38b59; // A sophisticated gold/bronze
-  --primary-color-hover: #c9a370;
-  --secondary-color: #a0a0a0; // A neutral grey for accents
-  // Text Colors
-  --text-color-dark: #1a1a1a;
-  --text-color-medium: #555;
-  --text-color-light: #888;
-  --text-color-inverted: #ffffff;
-  // Background Colors
-  --background-color: #ffffff;
-  --background-color-light: #f7f7f7; // For components on a white background
-  // Border & Dividers
-  --border-color-light: #e5e5e5;
-  --border-color-dark: #cccccc;
-  // System Colors
-  --success-color: #28a745;
-  --error-color: #dc3545;
-  --warning-color: #ffc107;
-}
+// Neutral & Text Palette
+$color-text-primary: #1a1a1a;
+$color-text-secondary: #5a5a5a;
+$color-text-light: #757575;
 
+// Background & Border Palette
+$color-background-light-gray: #f7f7f7;
+$color-background-medium-gray: #e9e9e9;
+$color-border-light: #e0e0e0;
+$color-border-dark: #cccccc;
+$color-disabled: #c0c0c0;
 
-// ---------------------------
-// SASS VARIABLES (for mixins, media queries etc.)
-// ---------------------------
+// === Typography ===
+$font-family-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif; // Example font stack
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
 
-// Breakpoints
+// === Sizing & Spacing ===
+$spacing-unit: 8px; // Base unit for margins, padding, etc.
+
+// === Borders & Shadows ===
+$border-radius-sm: 3px;
+$border-radius-md: 5px;
+$box-shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.08);
+$box-shadow-strong: 0 6px 20px rgba(0, 0, 0, 0.15);
+
+// === Breakpoints (FIX: ADDED) ===
 $tablet-breakpoint: 992px;
-$mobile-breakpoint: 768px;
+$mobile-breakpoint: 767px;
 
-// Other variables
-$border-radius-default: 8px;
-$border-radius-small: 4px;
+// === Mixins ===
+@mixin flex-container($justify: flex-start, $align: stretch, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}

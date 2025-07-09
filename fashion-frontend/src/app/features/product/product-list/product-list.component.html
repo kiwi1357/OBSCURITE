@@ -1,8 +1,7 @@
-<!-- src/app/features/product/product-list/product-list.component.html -->
 <div class="container">
   <div class="page-header">
     <app-breadcrumb [crumbs]="breadcrumbs" [lang]="currentLang" />
-    <h1>{{ pageTitle | translate:currentLang }}</h1>
+    <h1>{{ pageTitle | translate: currentLang }}</h1>
   </div>
 
   <div class="toolbar">
@@ -10,8 +9,14 @@
     <div class="product-count">{{ totalProducts }} PRODUCTS</div>
     <div class="controls-right">
       <div class="view-toggle-buttons">
-        <button (click)="toggleViewMode('grid')" [class.active]="viewMode === 'grid'">Grid</button>
-        <button (click)="toggleViewMode('list')" [class.active]="viewMode === 'list'">List</button>
+        <button (click)="toggleViewMode('grid')"
+                [class.active]="viewMode === 'grid'">
+          Grid
+        </button>
+        <button (click)="toggleViewMode('list')"
+                [class.active]="viewMode === 'list'">
+          List
+        </button>
       </div>
       <div class="sort-control">
         <select [(ngModel)]="selectedSort" (change)="onSortChange()">
@@ -27,7 +32,9 @@
     @if (isLoading) {
     <p>Loading...</p>
     } @else {
-    <div class="product-container" [class.grid-view]="viewMode === 'grid'" [class.list-view]="viewMode === 'list'">
+    <div class="product-container"
+         [class.grid-view]="viewMode === 'grid'"
+         [class.list-view]="viewMode === 'list'">
       @for (product of products; track product._id) {
       <app-product-card [product]="product" [viewMode]="viewMode" />
       } @empty {
@@ -40,7 +47,7 @@
 
 @if (isFilterSidebarOpen) {
 <div class="filter-backdrop" (click)="toggleFilterSidebar()"></div>
-<div class="filter-sidebar-container" [class.is-open]="isFilterSidebarOpen">
+<div class="filter-sidebar-container is-open">
   <div class="sidebar-header">
     <h3>Filters</h3>
     <button (click)="toggleFilterSidebar()">✕</button>

@@ -19,8 +19,8 @@ import { ProfileComponent } from './features/auth/profile/profile.component';
 import { authGuard } from './core/guards/auth.guard';
 import { AddressBookComponent } from './features/user/pages/address-book/address-book.component';
 import { OrderDetailComponent } from './features/user/pages/order-detail/order-detail.component';
-import { OrderHistoryComponent } from './features/user/pages/order-history/order-history.component'; // << IMPORTED
-import { WishlistComponent } from './features/user/pages/wishlist/wishlist.component';
+import { OrderHistoryComponent } from './features/user/pages/order-history/order-history.component';
+import { WishlistPageComponent } from './features/user/pages/wishlist-page/wishlist-page.component'; // << IMPORT WISHLIST PAGE
 
 export const routes: Routes = [
   {
@@ -53,8 +53,14 @@ export const routes: Routes = [
           { path: 'addresses', component: AddressBookComponent },
           { path: 'orders', component: OrderHistoryComponent },
           { path: 'orders/:id', component: OrderDetailComponent },
-          { path: 'wishlist', component: WishlistComponent }, // << ADDED ROUTE
+          { path: 'wishlist', component: WishlistPageComponent }, // << ADD WISHLIST ROUTE
         ]
+      },
+      // --- Standalone User Routes (also protected) ---
+      {
+        path: 'user/wishlist', // A more direct, top-level route
+        component: WishlistPageComponent,
+        canActivate: [authGuard]
       },
     ]
   },

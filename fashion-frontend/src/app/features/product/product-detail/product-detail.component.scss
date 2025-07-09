@@ -1,30 +1,14 @@
-// src/app/features/product/product-detail/product-detail.component.scss
-
-// --- Variable Placeholders (Adjust to your theme) ---
-$text-color: #333;
-$primary-color: #000; // Example: Puma black
-$secondary-color: #757575; // Lighter text
-$border-color: #e0e0e0;
-$accent-color-red: #d30813; // Example: Puma red for highlights
-$disabled-color: #c0c0c0;
-$font-family-sans: Arial, sans-serif; // Replace with your actual font
-
-// --- Mixins for reusability ---
-@mixin flex-container($justify: flex-start, $align: stretch, $direction: row) {
-  display: flex;
-  justify-content: $justify;
-  align-items: $align;
-  flex-direction: $direction;
-}
+// src/app/features/product/product-detail/product-detail.scss
+@use '../../../../styles/variables' as v; // <<< IMPORT central variables
 
 // --- General Page Styles ---
 .pdp-page-container {
-  padding-bottom: 40px; // Space for footer
+  padding-bottom: 40px;
 }
 
-.pdp-main-content { // Wrapper for gallery and details
-  &.container { // If you have a global .container for max-width and centering
-    max-width: 1200px; // Adjust as needed
+.pdp-main-content {
+  &.container {
+    max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 15px;
@@ -39,53 +23,52 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
 }
 
 .pdp-layout {
-  @include flex-container(space-between, flex-start);
-  gap: 30px; // Space between gallery and details
+  @include v.flex-container(space-between, flex-start); // <<< USE MIXIN from variables
+  gap: 30px;
 
-  @media (max-width: 992px) { // Tablet and mobile: stack them
+  @media (max-width: v.$tablet-breakpoint) {
     flex-direction: column;
   }
 }
 
 // --- Gallery Column (Left) ---
 .gallery-column {
-  flex: 0 0 60%; // Takes up more space, adjust as needed
-  @include flex-container(flex-start, flex-start); // Thumbnails left, Main image right
+  flex: 0 0 60%;
+  @include v.flex-container(flex-start, flex-start);
   gap: 15px;
 
-  @media (max-width: 992px) {
+  @media (max-width: v.$tablet-breakpoint) {
     flex-basis: 100%;
-    order: 1; // Show gallery first on mobile
+    order: 1;
   }
 
-  @media (max-width: 767px) { // Mobile: Thumbnails below main image
-    flex-direction: column-reverse; // Main image on top, then thumbnails
+  @media (max-width: v.$mobile-breakpoint) {
+    flex-direction: column-reverse;
   }
 }
 
 .thumbnails-container {
-  @include flex-container(flex-start, flex-start, column);
+  @include v.flex-container(flex-start, flex-start, column);
   gap: 10px;
-  flex: 0 0 80px; // Width of thumbnail column
+  flex: 0 0 80px;
 
-  @media (max-width: 767px) { // Mobile: Horizontal scroll for thumbnails
+  @media (max-width: v.$mobile-breakpoint) {
     flex-direction: row;
     overflow-x: auto;
-    padding-bottom: 10px; // Space for scrollbar
+    padding-bottom: 10px;
     width: 100%;
-    flex-basis: auto; // Reset basis
-    justify-content: flex-start;
+    flex-basis: auto;
 
     .thumbnail-item {
-      flex: 0 0 70px; // Fixed width for horizontal items
+      flex: 0 0 70px;
     }
   }
 }
 
 .thumbnail-item {
-  width: 80px; // Match container width
+  width: 80px;
   height: 80px;
-  border: 1px solid $border-color;
+  border: 1px solid v.$color-border-light; // <<< USE VARIABLE
   cursor: pointer;
   overflow: hidden;
   transition: border-color 0.3s ease;
@@ -97,13 +80,13 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
   }
 
   &.active, &:hover {
-    border-color: $primary-color;
+    border-color: v.$color-primary;
   }
 }
 
 .main-image-container {
-  flex-grow: 1; // Takes remaining space in gallery column
-  border: 1px solid $border-color;
+  flex-grow: 1;
+  border: 1px solid v.$color-border-light;
 
   img.main-product-image {
     width: 100%;
@@ -114,49 +97,31 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
 
 // --- Details Column (Right) ---
 .details-column {
-  flex: 0 0 37%; // Remaining space, adjust as needed
-  font-family: $font-family-sans;
-  padding-left: 15px; // Some spacing from gallery
+  flex: 0 0 37%;
+  font-family: v.$font-family-sans; // <<< USE VARIABLE
+  padding-left: 15px;
 
   &.sticky {
     position: sticky;
-    // top: 80px; // Adjust based on your header height for sticky nav
-    // width attribute will be set by JS
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: v.$tablet-breakpoint) {
     flex-basis: 100%;
     order: 2;
-    padding-left: 0; // No padding when stacked
-    &.sticky { // Disable stickiness on smaller screens if it causes issues
+    padding-left: 0;
+
+    &.sticky {
       position: static;
-      top: auto !important; // Override JS style
+      top: auto !important;
       width: auto !important;
     }
   }
 
-  .product-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    background-color: $accent-color-red;
-    color: white;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-  }
-
   .product-title {
-    font-size: 1.8rem; // Puma uses ~24-28px
-    font-weight: bold; // Or a specific bold weight like 700
+    font-size: 1.8rem;
+    font-weight: v.$font-weight-bold;
     margin-bottom: 4px;
-    color: $text-color;
-  }
-
-  .product-subtitle {
-    font-size: 1rem;
-    color: $secondary-color;
-    margin-bottom: 16px;
+    color: v.$color-text-primary;
   }
 
   .price-section {
@@ -164,24 +129,24 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
 
     .price-original {
       text-decoration: line-through;
-      color: $secondary-color;
+      color: v.$color-text-secondary;
       font-size: 0.9rem;
       margin-right: 8px;
     }
 
     .price-current {
-      font-size: 1.5rem; // Puma uses ~20px
-      font-weight: bold;
-      color: $text-color; // Or sometimes red for sale
+      font-size: 1.5rem;
+      font-weight: v.$font-weight-bold;
+      color: v.$color-text-primary;
     }
 
     .vat-info {
       font-size: 0.75rem;
-      color: $secondary-color;
+      color: v.$color-text-secondary;
       margin-top: 4px;
 
       a {
-        color: $secondary-color;
+        color: v.$color-text-secondary;
         text-decoration: underline;
       }
     }
@@ -193,19 +158,19 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
     label {
       display: block;
       font-size: 0.9rem;
-      font-weight: bold;
+      font-weight: v.$font-weight-bold;
       margin-bottom: 8px;
-      color: $text-color;
+      color: v.$color-text-primary;
 
       .selected-value {
-        font-weight: normal;
-        color: $secondary-color;
+        font-weight: v.$font-weight-regular;
+        color: v.$color-text-secondary;
       }
     }
   }
 
   .size-header {
-    @include flex-container(space-between, center);
+    @include v.flex-container(space-between, center);
     margin-bottom: 8px;
 
     label {
@@ -216,12 +181,12 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
   .size-guide-link {
     font-size: 0.8rem;
     text-decoration: underline;
-    color: $text-color;
-    font-weight: normal;
+    color: v.$color-text-primary;
+    font-weight: v.$font-weight-regular;
   }
 
   .swatches {
-    @include flex-container(flex-start, center);
+    @include v.flex-container(flex-start, center);
     flex-wrap: wrap;
     gap: 8px;
 
@@ -229,37 +194,39 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
       min-width: 40px;
       height: 40px;
       padding: 5px;
-      border: 1px solid $border-color;
-      background-color: white;
+      border: 1px solid v.$color-border-light;
+      background-color: v.$color-white;
       cursor: pointer;
       transition: border-color 0.3s ease;
       font-size: 0.85rem;
-      @include flex-container(center, center);
+      @include v.flex-container(center, center);
 
       &:hover {
-        border-color: $text-color;
+        border-color: v.$color-text-primary;
       }
 
       &.selected {
-        border-color: $primary-color;
+        border-color: v.$color-primary;
         border-width: 2px;
       }
 
       &:disabled, &.out-of-stock {
         opacity: 0.5;
         cursor: not-allowed;
-        border-color: $border-color;
-        text-decoration: line-through; // For out of stock sizes
+        border-color: v.$color-border-light;
+        text-decoration: line-through;
+
         &:hover {
-          border-color: $border-color;
+          border-color: v.$color-border-light;
         }
       }
     }
 
     .color-swatch {
-      width: 50px; // Fixed size for image swatches
+      width: 50px;
       height: 50px;
-      padding: 2px; // Minimal padding if image has its own whitespace
+      padding: 2px;
+
       img {
         width: 100%;
         height: 100%;
@@ -270,7 +237,7 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
 
   .low-stock-warning, .out-of-stock-message {
     font-size: 0.8rem;
-    color: $accent-color-red;
+    color: v.$color-accent-red;
     margin-top: 8px;
     display: block;
   }
@@ -281,13 +248,13 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
     label {
       display: block;
       font-size: 0.9rem;
-      font-weight: bold;
+      font-weight: v.$font-weight-bold;
       margin-bottom: 8px;
     }
 
     .quantity-input-wrapper {
-      @include flex-container(flex-start, center);
-      border: 1px solid $border-color;
+      @include v.flex-container(flex-start, center);
+      border: 1px solid v.$color-border-light;
       width: fit-content;
 
       button {
@@ -307,13 +274,13 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
         width: 40px;
         text-align: center;
         border: none;
-        border-left: 1px solid $border-color;
-        border-right: 1px solid $border-color;
+        border-left: 1px solid v.$color-border-light;
+        border-right: 1px solid v.$color-border-light;
         padding: 10px 0;
         font-size: 0.9rem;
-        appearance: textfield; // Remove spinner for number input
-        &::-webkit-outer-spin-button,
-        &::-webkit-inner-spin-button {
+        appearance: textfield;
+
+        &::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
           -webkit-appearance: none;
           margin: 0;
         }
@@ -322,60 +289,65 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
   }
 
   .actions-row {
-    @include flex-container(flex-start, center);
+    @include v.flex-container(flex-start, stretch);
     gap: 10px;
     margin-bottom: 20px;
 
     .add-to-cart-btn {
       flex-grow: 1;
-      background-color: $primary-color;
-      color: white;
+      background-color: v.$color-primary;
+      color: v.$color-white;
       border: none;
       padding: 12px 20px;
       font-size: 0.9rem;
-      font-weight: bold;
+      font-weight: v.$font-weight-bold;
       text-transform: uppercase;
       cursor: pointer;
       transition: background-color 0.3s ease;
 
       &:hover:not(:disabled) {
-        background-color: darken($primary-color, 10%);
+        background-color: darken(v.$color-primary, 10%);
       }
 
       &:disabled {
-        background-color: $disabled-color;
+        background-color: v.$color-disabled;
         cursor: not-allowed;
       }
     }
 
     .wishlist-btn {
-      background: none;
-      border: 1px solid $border-color;
-      padding: 10px;
+      flex-shrink: 0;
+      width: 50px;
+      height: auto;
+      @include v.flex-container(center, center);
+      border: 1px solid v.$color-border-dark;
+      background-color: v.$color-white;
       cursor: pointer;
-      @include flex-container(center, center);
+      transition: all 0.2s ease-in-out;
 
-      svg.icon-heart {
+      .icon-heart {
         width: 24px;
         height: 24px;
-        stroke: $text-color; // Or a specific wishlist icon color
+        stroke: v.$color-text-primary;
+        fill: none;
+        stroke-width: 1.5;
+        transition: all 0.2s ease-in-out;
       }
 
       &:hover {
-        border-color: $text-color;
+        border-color: v.$color-primary;
+        background-color: v.$color-background-light-gray;
       }
-      // Add .active class if product is in wishlist
-    }
-  }
 
-  .promo-text, .shipping-promo-text {
-    font-size: 0.8rem;
-    color: $secondary-color;
-    margin-bottom: 10px;
+      &.is-wishlisted {
+        border-color: v.$color-primary;
+        background-color: v.$color-primary;
 
-    a {
-      color: $secondary-color;
-      text-decoration: underline;
+        .icon-heart {
+          fill: v.$color-white;
+          stroke: v.$color-white;
+        }
+      }
     }
   }
 
@@ -383,10 +355,10 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
     margin-top: 30px;
 
     .accordion-item {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid v.$color-border-light;
 
       &:first-child {
-        border-top: 1px solid $border-color;
+        border-top: 1px solid v.$color-border-light;
       }
 
       .accordion-header {
@@ -396,17 +368,17 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
         text-align: left;
         padding: 15px 0;
         font-size: 1rem;
-        font-weight: bold;
+        font-weight: v.$font-weight-bold;
         cursor: pointer;
-        @include flex-container(space-between, center);
-        color: $text-color;
+        @include v.flex-container(space-between, center);
+        color: v.$color-text-primary;
       }
 
       .accordion-content {
-        padding: 0 0 15px 0; // No horizontal padding if header has none
+        padding: 0 0 15px 0;
         font-size: 0.9rem;
         line-height: 1.6;
-        color: $secondary-color;
+        color: v.$color-text-secondary;
 
         p, ul {
           margin-bottom: 10px;
@@ -421,17 +393,17 @@ $font-family-sans: Arial, sans-serif; // Replace with your actual font
 
   .product-meta {
     font-size: 0.85rem;
-    color: $secondary-color;
+    color: v.$color-text-secondary;
     margin-top: 10px;
 
     a {
-      color: $text-color;
+      color: v.$color-text-primary;
       text-decoration: underline;
 
       &:hover {
-        color: $primary-color;
+        color: v.$color-primary;
       }
     }
   }
 }
-// End .details-column
+// <<< FIX: Added missing closing brace for .details-column

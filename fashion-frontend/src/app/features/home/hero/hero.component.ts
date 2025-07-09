@@ -6,7 +6,7 @@ import { LanguageService } from '../../../core/services/language.service';
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.scss'
 })

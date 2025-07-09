@@ -1,37 +1,31 @@
 <!-- src/app/shared/components/product-card/product-card.component.html -->
 @if (product && (lang$ | async); as lang) {
 <div class="card">
-  <div class="card-image-container">
-    <!-- Wishlist Button -->
-    @if (isLoggedIn$ | async) {
-    <button class="wishlist-button"
-            [class.in-wishlist]="isInWishlist$ | async"
-            (click)="toggleWishlist($event)"
-            [attr.aria-label]="(isInWishlist$ | async) ? 'Remove from Wishlist' : 'Add to Wishlist'">
-      <svg class="icon-svg icon-heart" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-      </svg>
-    </button>
-    }
-    <!-- End Wishlist Button -->
+  <!-- Wishlist button is now inside the card but outside the main link -->
+  <button class="wishlist-toggle"
+          (click)="toggleWishlist($event)"
+          [class.is-wishlisted]="isWishlisted$ | async"
+          aria-label="Toggle Wishlist">
+    <svg class="icon-svg icon-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+  </button>
 
-    <a class="card-link" [routerLink]="['/', lang, 'product', product.slug]">
+  <a class="card-link" [routerLink]="['/', lang, 'product', product.slug]">
+    <div class="card-image-container">
       @if (product.variants && product.variants.length > 0 && product.variants[0].mainImage) {
       <img [src]="product.variants[0].mainImage" [alt]="product.name | translate">
       } @else {
       <div class="placeholder-image" [attr.aria-label]="product.name | translate">No Image</div>
       }
-    </a>
-  </div>
+    </div>
 
-  <div class="card-content">
-    <a class="card-link" [routerLink]="['/', lang, 'product', product.slug]">
+    <div class="card-content">
       <h3 class="card-title">{{ product.name | translate }}</h3>
+
       @if (product.variants && product.variants.length > 0) {
       <p class="card-price">{{ product.variants[0].price | currency:'EUR' }}</p>
       }
-    </a>
-  </div>
+    </div>
+  </a>
 </div>
 } @else {
 <!-- Placeholder for when product data is not yet available -->

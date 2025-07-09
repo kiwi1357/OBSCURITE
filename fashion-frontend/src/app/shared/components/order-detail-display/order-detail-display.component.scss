@@ -1,26 +1,25 @@
 // src/app/shared/components/order-detail-display/order-detail-display.component.scss
-@import '../../../../styles/variables';
+@use '../../../../styles/variables' as v;
 
 .order-details-container {
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
 
 .order-summary-header {
-  margin-bottom: 2rem;
+  border-bottom: 1px solid v.$color-border-light;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color-light);
+  margin-bottom: 2rem;
 
   h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
+    font-weight: v.$font-weight-bold;
     margin: 0 0 0.5rem 0;
   }
 
   .header-info {
-    color: var(--text-color-medium);
-
-    .separator {
-      margin: 0 0.5rem;
-    }
+    display: flex;
+    gap: 1rem;
+    color: v.$color-text-secondary;
   }
 }
 
@@ -29,69 +28,70 @@
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
 
-  @media (max-width: $tablet-breakpoint) {
+  @media (max-width: v.$tablet-breakpoint) { // <<< FIX: This will now work
     grid-template-columns: 1fr;
   }
 }
 
-.order-sidebar {
-  @media (max-width: $tablet-breakpoint) {
-    order: -1; // Move sidebar to top on mobile
-  }
+.order-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .order-section {
-  background-color: var(--background-color-light);
-  padding: 1.5rem;
-  border-radius: $border-radius-default;
-  margin-bottom: 2rem;
-
   .section-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    font-weight: v.$font-weight-bold;
+    margin-bottom: 1.5rem;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border-color-light);
+    border-bottom: 1px solid v.$color-border-light;
   }
 }
 
-.order-item-card {
+.items-section .order-item-card {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  align-items: flex-start;
 
-  &:last-child {
-    margin-bottom: 0;
+  &:not(:last-child) {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid v.$color-border-light;
   }
 
-  .item-image img {
-    width: 90px;
-    height: 90px;
-    object-fit: cover;
-    border-radius: $border-radius-small;
+  .item-image {
+    flex-shrink: 0;
+    width: 100px;
+    height: 120px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   .item-info {
     flex-grow: 1;
+  }
 
-    .item-name {
-      font-weight: 600;
-      margin: 0 0 0.25rem 0;
-    }
+  .item-name {
+    font-weight: v.$font-weight-medium;
+  }
 
-    .item-variant, .item-sku, .item-quantity {
-      font-size: 0.9rem;
-      color: var(--text-color-medium);
-      margin: 0.2rem 0;
-    }
+  .item-variant, .item-sku, .item-quantity {
+    font-size: 0.9rem;
+    color: v.$color-text-secondary;
+    margin-top: 0.25rem;
   }
 
   .item-price {
-    font-weight: 600;
+    font-weight: v.$font-weight-bold;
   }
 }
 
-.totals-grid {
+.totals-section .totals-grid {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -101,49 +101,31 @@
     justify-content: space-between;
 
     &.discount {
-      color: var(--success-color);
+      color: v.$color-accent-red;
     }
 
     &.total {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: v.$font-weight-bold;
+      border-top: 1px solid v.$color-border-dark;
       padding-top: 1rem;
-      border-top: 1px solid var(--border-color-light);
+      margin-top: 0.5rem;
     }
   }
 }
 
-.address-details p {
-  margin: 0.25rem 0;
-  line-height: 1.5;
+.order-sidebar .address-section, .order-sidebar .status-section {
+  background-color: v.$color-background-light-gray;
+  padding: 1.5rem;
+  border-radius: v.$border-radius-md;
+  margin-bottom: 2rem;
+}
+
+.address-details {
+  line-height: 1.6;
 }
 
 .order-status {
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  background-color: var(--border-color-light);
-  display: inline-block;
+  font-weight: v.$font-weight-bold;
   text-transform: capitalize;
-
-  &.processing {
-    background-color: #e6f7ff;
-    color: #1890ff;
-  }
-
-  &.shipped {
-    background-color: #f6ffed;
-    color: #52c41a;
-  }
-
-  &.delivered {
-    background-color: #e6f4ea;
-    color: #28a745;
-  }
-
-  &.cancelled, &.failed {
-    background-color: #fff1f0;
-    color: #f5222d;
-  }
 }

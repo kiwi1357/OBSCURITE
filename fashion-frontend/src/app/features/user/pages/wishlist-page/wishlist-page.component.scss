@@ -1,0 +1,70 @@
+// src/app/features/user/pages/wishlist-page/wishlist-page.scss
+@use '../../../../../styles/variables' as v; // <<< FIX: Added the missing import
+
+.container {
+  padding: 2rem;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.wishlist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid v.$color-border-light; // <<< FIX: This will now work
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: v.$font-weight-bold;
+    margin: 0;
+  }
+
+  .item-count {
+    font-size: 1rem;
+    color: v.$color-text-secondary;
+  }
+}
+
+.wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem 1.5rem;
+}
+
+.empty-wishlist {
+  text-align: center;
+  padding: 4rem 2rem;
+  border: 1px dashed v.$color-border-light;
+  border-radius: v.$border-radius-md;
+  background-color: v.$color-background-light-gray;
+  margin-top: 2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: v.$font-weight-bold;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    max-width: 450px;
+    margin: 0 auto 2rem auto;
+    color: v.$color-text-secondary;
+    line-height: 1.6;
+  }
+
+  .button.primary {
+    background-color: v.$color-primary;
+    color: v.$color-white;
+    padding: 0.75rem 2rem;
+    text-decoration: none;
+    border-radius: v.$border-radius-sm;
+    font-weight: v.$font-weight-medium;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: darken(v.$color-primary, 10%);
+    }
+  }
+}

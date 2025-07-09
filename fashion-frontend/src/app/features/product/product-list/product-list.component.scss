@@ -1,35 +1,36 @@
-
+// Overlay backdrop for filter sidebar
 .filter-backdrop {
-  position: fixed; // Makes it cover the whole screen
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.4);
-  z-index: 1500; // Ensures it's above the page content
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1500;
 }
 
+// Filter sidebar panel
 .filter-sidebar-container {
-  position: fixed; // Makes it break out of the normal document flow
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   width: 100%;
-  max-width: 400px; // Or your desired width
+  max-width: 400px;
   background-color: #fff;
-  z-index: 1600; // Ensures it's on top of the backdrop
-  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+  z-index: 1600;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  // Add animation for a smooth slide-in
   transform: translateX(-100%);
   transition: transform 0.3s ease-in-out;
-  // This class will be added by Angular to slide it into view
+
   &.is-open {
     transform: translateX(0);
   }
 }
 
+// Sidebar header
 .sidebar-header {
   display: flex;
   justify-content: space-between;
@@ -54,6 +55,7 @@
   }
 }
 
+// Toolbar controls
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -69,46 +71,7 @@
   gap: 1rem;
 }
 
-.view-toggle-buttons {
-  display: inline-flex;
-  button {
-    background: none;
-    border: 1px solid #ccc;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    &:first-child {
-      border-right: none;
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-    }
-    &:last-child {
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
-    }
-    &.active {
-      background-color: #000;
-      color: #fff;
-      border-color: #000;
-    }
-  }
-}
-
-
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  border-bottom: 1px solid #eee;
-  flex-wrap: wrap;
-}
-
-.controls-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
+// View toggle buttons
 .view-toggle-buttons {
   display: inline-flex;
 
@@ -137,6 +100,7 @@
   }
 }
 
+// Product list container
 .product-container {
   &.grid-view {
     display: grid;

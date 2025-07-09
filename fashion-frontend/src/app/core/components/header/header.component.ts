@@ -2,28 +2,31 @@
 import { Component, EventEmitter, Output, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // << IMPORT CommonModule for AsyncPipe
+import { CommonModule } from '@angular/common';
+import { Subscription, Observable, filter } from 'rxjs';
+
 import { AuthService } from '../../services/auth.service';
 import { LanguageService } from '../../services/language.service';
-import { CartService } from '../../services/cart.service'; // << IMPORT CartService
+import { CartService } from '../../services/cart.service';
+import { WishlistService } from '../../services/wishlist.service'; // << IMPORT
 import { User } from '../../models/user.model';
-import { Subscription, Observable, filter } from 'rxjs'; // Import Observable
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule], // << ADD CommonModule
+  imports: [RouterLink, FormsModule, CommonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() menuToggle = new EventEmitter<void>();
-  @Output() cartToggle = new EventEmitter<void>(); // << NEW Output for cart sidebar
+  @Output() cartToggle = new EventEmitter<void>();
 
   private router = inject(Router);
   public authService = inject(AuthService);
   private languageService = inject(LanguageService);
-  public cartService = inject(CartService); // << INJECT CartService, make public for template
+  public cartService = inject(CartService);
+  public wishlistService = inject(WishlistService); // << INJECT
 
   desktopSearchTerm: string = '';
   mobileSearchTerm: string = '';
@@ -33,14 +36,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   currentUser: User | null = null;
 
-  itemCount$: Observable<number>; // << Observable for cart item count
+  itemCount$: Observable<number>;
+  wishlistCount$: Observable<number>; // << WISHLIST COUNT
 
   private langSub!: Subscription;
   private userSub!: Subscription;
   private routerSub!: Subscription;
 
-  constructor() { // << CartService can be initialized in constructor
+  constructor() {
     this.itemCount$ = this.cartService.itemCount$;
+    this.wishlistCount$ = this.wishlistService.wishlistCount$; // << ASSIGN
   }
 
   ngOnInit(): void {
@@ -60,15 +65,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
-  onMenuClick(): void {
-    this.menuToggle.emit();
-  }
-
-  onCartClick(): void { // << NEW method to handle cart icon click
-    this.cartToggle.emit();
-    console.log('Cart icon clicked - toggle sidebar');
-    // Later, this will tell AppComponent to open the cart sidebar
-  }
+  onMenuClick(): void { this.menuToggle.emit(); }
+  onCartClick(): void { this.cartToggle.emit(); }
 
   onDesktopSearch(): void {
     if (this.desktopSearchTerm.trim()) {
@@ -76,9 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleMobileSearch(): void {
-    this.isMobileSearchActive = !this.isMobileSearchActive;
-  }
+  toggleMobileSearch(): void { this.isMobileSearchActive = !this.isMobileSearchActive; }
 
   onMobileSearch(): void {
     if (this.mobileSearchTerm.trim()) {
@@ -88,9 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  logout(): void {
-    this.authService.logout();
-  }
+  logout(): void { this.authService.logout(); }
 
   ngOnDestroy(): void {
     this.langSub?.unsubscribe();

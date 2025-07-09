@@ -1,0 +1,31 @@
+<!-- src/app/features/user/pages/wishlist-page/wishlist-page.component.html -->
+<div class="container">
+  <app-breadcrumb [crumbs]="breadcrumbs" [lang]="currentLang"></app-breadcrumb>
+
+  <div class="wishlist-header">
+    <h1>My Wishlist</h1>
+    <span class="item-count">{{ wishlistService.wishlistCount$ | async }} Items</span>
+  </div>
+
+  @if (isLoading) {
+  <p>Loading your wishlist...</p>
+  } @else if (error) {
+  <div class="error-state">{{ error }}</div>
+  } @else {
+  @if (wishlistItems$ | async; as items) {
+  @if (items.length > 0) {
+  <div class="wishlist-grid">
+    @for (product of items; track product._id) {
+    <app-product-card [product]="product"></app-product-card>
+    }
+  </div>
+  } @else {
+  <div class="empty-wishlist">
+    <h2>NOTHING IN YOUR WISHLIST YET</h2>
+    <p>You haven't added any items to your wishlist. When you see something you like, click the heart to save it here.</p>
+    <a [routerLink]="['/', currentLang]" class="button primary">Continue Shopping</a>
+  </div>
+  }
+  }
+  }
+</div>

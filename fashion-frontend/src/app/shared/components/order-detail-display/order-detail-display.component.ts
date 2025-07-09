@@ -9,7 +9,7 @@ import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 @Component({
   selector: 'app-order-detail-display',
   standalone: true,
-  imports: [CommonModule, RouterLink, CurrencyPipe, DatePipe, TranslatePipe],
+  imports: [CommonModule, CurrencyPipe, DatePipe],
   templateUrl: './order-detail-display.component.html',
   styleUrls: ['./order-detail-display.component.scss']
 })

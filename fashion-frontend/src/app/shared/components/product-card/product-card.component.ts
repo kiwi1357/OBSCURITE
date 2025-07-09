@@ -1,59 +1,62 @@
 // src/app/shared/components/product-card/product-card.component.ts
-import { Component, Input, inject, OnInit } from '@angular/core'; // << Add OnInit
-import { Product } from '../../../core/models/product.model';
+import { Component, Input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Observable, map, of } from 'rxjs';
+
 import { LanguageService } from '../../../core/services/language.service';
-import { Observable, of } from 'rxjs'; // << Add of
-import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 import { WishlistService } from '../../../core/services/wishlist.service'; // << IMPORT
 import { AuthService } from '../../../core/services/auth.service'; // << IMPORT
+
+import { Product } from '../../../core/models/product.model';
+import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.scss'] // << FIX styleUrl to styleUrls
+  styleUrls: ['./product-card.component.scss']
 })
-export class ProductCardComponent implements OnInit { // << IMPLEMENT OnInit
+export class ProductCardComponent implements OnInit {
   private languageService = inject(LanguageService);
   private wishlistService = inject(WishlistService); // << INJECT
   private authService = inject(AuthService); // << INJECT
+  private router = inject(Router); // << INJECT ROUTER
 
   @Input() viewMode: 'grid' | 'list' = 'grid';
   @Input() product!: Product;
 
   lang$: Observable<string> = this.languageService.activeLang$;
-  isInWishlist$: Observable<boolean> = of(false); // << Initialize with default
-  isLoggedIn$: Observable<boolean>;
-
-  constructor() {
-    this.isLoggedIn$ = this.authService.isAuthenticated$;
-  }
+  isWishlisted$!: Observable<boolean>;
 
   ngOnInit(): void {
-    if (this.product) {
-      this.isInWishlist$ = this.wishlistService.isProductInWishlist$(this.product._id);
+    if (!this.product) {
+      this.isWishlisted$ = of(false);
+      return;
     }
+    this.isWishlisted$ = this.wishlistService.wishlistedIds$.pipe(
+      map(ids => ids.has(this.product._id))
+    );
   }
 
   toggleWishlist(event: Event): void {
-    event.preventDefault(); // Prevent navigation when clicking the button
-    event.stopPropagation(); // Stop event from bubbling up to the card's link
+    event.preventDefault(); // Stop the card's link from navigating
+    event.stopPropagation(); // Stop any other parent click events
 
     if (!this.authService.getCurrentUserValue()) {
-      // Or redirect to login
-      alert('Please log in to use the wishlist feature.');
+      this.router.navigate(['/', this.languageService.activeLang$.value, 'login'], { queryParams: { returnUrl: this.router.url } });
       return;
     }
 
-    const currentWishlistState = (this.isInWishlist$ as any).source.value; // Quick way to get current value
+    const isCurrentlyWishlisted = this.wishlistService.isProductWishlisted(this.product._id);
+    const operation = isCurrentlyWishlisted
+      ? this.wishlistService.removeFromWishlist(this.product._id)
+      : this.wishlistService.addToWishlist(this.product._id);
 
-    if (currentWishlistState) {
-      this.wishlistService.removeFromWishlist(this.product._id).subscribe();
-    } else {
-      this.wishlistService.addToWishlist(this.product._id).subscribe();
-    }
+    operation.subscribe({
+      // Optional: Add visual feedback here if needed
+      error: err => console.error("Failed to update wishlist from product card", err)
+    });
   }
 }

@@ -7,7 +7,7 @@ import { LanguageService } from '../../../core/services/language.service';
 @Component({
   selector: 'app-order-success',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './order-success.component.html',
   styleUrls: ['./order-success.component.scss']
 })

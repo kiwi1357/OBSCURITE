@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { User, AuthResponse } from '../models/user.model';
 import { LanguageService } from './language.service';
-import { WishlistService } from './wishlist.service'; // << IMPORT
+import { WishlistService } from './wishlist.service'; // << IMPORT WISHLIST SERVICE
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private languageService = inject(LanguageService);
-  private wishlistService = inject(WishlistService); // << INJECT
+  private wishlistService = inject(WishlistService); // << INJECT WISHLIST SERVICE
   private ngZone = inject(NgZone);
 
   private apiUrl = environment.apiUrl;
@@ -44,11 +44,11 @@ export class AuthService {
       this.fetchUserProfile().subscribe({
         next: (user) => {
           this.currentUserSubject.next(user);
-          this.wishlistService.loadWishlistIds(); // << LOAD WISHLIST ON SUCCESS
+          this.wishlistService.initializeWishlistState(); // << INITIALIZE WISHLIST
         },
         error: (err) => {
           console.error('AuthService: Error fetching user profile on load:', err.message || err);
-          this.logout(); // This will clear the wishlist
+          this.logout();
         }
       });
     }
@@ -63,7 +63,7 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('authToken', response.token);
         this.currentUserSubject.next(response.user);
-        this.wishlistService.loadWishlistIds(); // << LOAD WISHLIST ON LOGIN
+        this.wishlistService.initializeWishlistState(); // << INITIALIZE WISHLIST
       }),
       catchError(this.handleError)
     );
@@ -74,7 +74,7 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('authToken', response.token);
         this.currentUserSubject.next(response.user);
-        this.wishlistService.loadWishlistIds(); // << LOAD WISHLIST ON REGISTER
+        this.wishlistService.initializeWishlistState(); // << INITIALIZE WISHLIST
       }),
       catchError(this.handleError)
     );
@@ -83,7 +83,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('authToken');
     this.currentUserSubject.next(null);
-    this.wishlistService.clearWishlist(); // << CLEAR WISHLIST ON LOGOUT
+    this.wishlistService.clearWishlistState(); // << CLEAR WISHLIST ON LOGOUT
     const currentLang = this.languageService.activeLang$.value || 'en';
     this.router.navigate(['/', currentLang, 'login']);
   }

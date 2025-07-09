@@ -16,7 +16,7 @@ import { Translation } from '../../../../core/models/translation.model';
 @Component({
   selector: 'app-address-book',
   standalone: true,
-  imports: [CommonModule, RouterLink, AddressFormComponent, BreadcrumbComponent],
+  imports: [CommonModule, AddressFormComponent, BreadcrumbComponent],
   templateUrl: './address-book.component.html',
   styleUrls: ['./address-book.component.scss']
 })
