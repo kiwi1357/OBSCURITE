@@ -1,0 +1,20 @@
+# Ignore Visual Studio temporary files
+.vs/
+*.user
+*.suo
+
+# Ignore Node modules
+node_modules/
+
+# Ignore build folders
+dist/
+build/
+out/
+
+# Ignore environment files
+.env
+.env.*
+
+# Others
+.DS_Store
+Thumbs.db

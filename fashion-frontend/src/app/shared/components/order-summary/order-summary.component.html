@@ -1,0 +1,51 @@
+<!-- src/app/shared/components/order-summary/order-summary.component.html -->
+<div class="summary-container">
+  <div class="summary-header" (click)="showItems = !showItems">
+    <h3>Order Summary</h3>
+    <div class="toggle-icon">{{ showItems ? '-' : '+' }}</div>
+  </div>
+
+  @if (cart) {
+  <div class="summary-items" [class.visible]="showItems">
+    @for (item of cart.items; track item.sku) {
+    <div class="summary-item">
+      <div class="item-image">
+        <img [src]="item.mainImage || '/uploads/placeholder.png'" [alt]="item.name | translate">
+        <span class="item-quantity-badge">{{ item.quantity }}</span>
+      </div>
+      <div class="item-info">
+        <p class="item-name">{{ item.name | translate }}</p>
+        <p class="item-variant">
+          {{ item.variantColorName | translate }} / {{ item.size }}
+        </p>
+      </div>
+      <div class="item-price">
+        {{ (item.price * item.quantity) | currency:'EUR' }}
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="summary-costs">
+    <div class="cost-line">
+      <span>Subtotal</span>
+      <span>{{ cart.subtotal | currency:'EUR' }}</span>
+    </div>
+    @if (cart.appliedPromo) {
+    <div class="cost-line discount">
+      <span>Discount ({{ cart.appliedPromo.source.code }})</span>
+      <span>- {{ cart.discountAmount | currency:'EUR' }}</span>
+    </div>
+    }
+    <div class="cost-line">
+      <span>Shipping</span>
+      <span>{{ cart.shippingCost === 0 ? 'FREE' : (cart.shippingCost | currency:'EUR') }}</span>
+    </div>
+    <div class="cost-line total">
+      <span>Total</span>
+      <span>{{ cart.total | currency:'EUR' }}</span>
+    </div>
+    <small class="vat-notice">Including VAT</small>
+  </div>
+  }
+</div>

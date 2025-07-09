@@ -1,0 +1,51 @@
+<!-- src/app/features/user/pages/order-history/order-history.component.html -->
+<div class="container">
+  <app-breadcrumb [crumbs]="breadcrumbs" [lang]="currentLang"></app-breadcrumb>
+
+  <div class="order-history-header">
+    <h1>Order History</h1>
+  </div>
+
+  @if (isLoading) {
+  <p>Loading your orders...</p>
+  } @else if (ordersError) {
+  <div class="error-state">{{ ordersError }}</div>
+  } @else {
+  <!-- This is the success block. Now we can safely use a primary @if with an 'as' alias. -->
+  @if (orders$ | async; as orders) {
+  @if (orders.length > 0) {
+  <div class="orders-list-container">
+    @for(order of orders; track order.customOrderId) {
+    <a class="order-summary-card" [routerLink]="['/', currentLang, 'account', 'orders', order.customOrderId]">
+      <div class="card-section info">
+        <span class="order-label">Order</span>
+        <span class="order-value">#{{ order.customOrderId }}</span>
+      </div>
+      <div class="card-section date">
+        <span class="order-label">Date</span>
+        <span class="order-value">{{ order.orderDate | date:'mediumDate' }}</span>
+      </div>
+      <div class="card-section status">
+        <span class="order-label">Status</span>
+        <span class="order-value" [ngClass]="order.status.toLowerCase().replace(' ', '-')">{{ order.status }}</span>
+      </div>
+      <div class="card-section total">
+        <span class="order-label">Total</span>
+        <span class="order-value">{{ order.grandTotal | currency:'EUR' }}</span>
+      </div>
+      <div class="card-section link">
+        <span>View Details →</span>
+      </div>
+    </a>
+    }
+  </div>
+  } @else {
+  <!-- This handles the case where the unwrapped 'orders' array is empty. -->
+  <div class="empty-state">
+    <p>You haven't placed any orders yet.</p>
+    <a class="button primary" [routerLink]="['/', currentLang]">Start Shopping</a>
+  </div>
+  }
+  }
+  }
+</div>

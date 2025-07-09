@@ -1,0 +1,125 @@
+<!-- src/app/features/user/components/address-form/address-form.component.html -->
+<div class="address-form-container">
+  <h3>{{ formTitle }}</h3>
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+    <!-- Address Name (Optional) -->
+    <div class="form-field">
+      <label for="addressName">Address Nickname (e.g., Home, Work)</label>
+      <input type="text" id="addressName" formControlName="addressName">
+    </div>
+
+    <!-- Full Name -->
+    <div class="form-field">
+      <label for="fullName">Full Name <span class="required">*</span></label>
+      <input type="text" id="fullName" formControlName="fullName">
+      @if (fc('fullName')?.invalid && (fc('fullName')?.dirty || fc('fullName')?.touched)) {
+      <div class="error-message">
+        @if (fc('fullName')?.errors?.['required']) { <small>Full name is required.</small> }
+        @if (fc('fullName')?.errors?.['maxlength']) { <small>Full name is too long.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- Address Line 1 -->
+    <div class="form-field">
+      <label for="addressLine1">Address Line 1 <span class="required">*</span></label>
+      <input type="text" id="addressLine1" formControlName="addressLine1">
+      @if (fc('addressLine1')?.invalid && (fc('addressLine1')?.dirty || fc('addressLine1')?.touched)) {
+      <div class="error-message">
+        @if (fc('addressLine1')?.errors?.['required']) { <small>Address is required.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- Address Line 2 -->
+    <div class="form-field">
+      <label for="addressLine2">Address Line 2 (Optional)</label>
+      <input type="text" id="addressLine2" formControlName="addressLine2">
+    </div>
+
+    <!-- City -->
+    <div class="form-field">
+      <label for="city">City <span class="required">*</span></label>
+      <input type="text" id="city" formControlName="city">
+      @if (fc('city')?.invalid && (fc('city')?.dirty || fc('city')?.touched)) {
+      <div class="error-message">
+        @if (fc('city')?.errors?.['required']) { <small>City is required.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- State/Province -->
+    <div class="form-field">
+      <label for="state">State/Province <span class="required">*</span></label>
+      <input type="text" id="state" formControlName="state">
+      @if (fc('state')?.invalid && (fc('state')?.dirty || fc('state')?.touched)) {
+      <div class="error-message">
+        @if (fc('state')?.errors?.['required']) { <small>State/Province is required.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- Zip/Postal Code -->
+    <div class="form-field">
+      <label for="zipCode">Zip/Postal Code <span class="required">*</span></label>
+      <input type="text" id="zipCode" formControlName="zipCode">
+      @if (fc('zipCode')?.invalid && (fc('zipCode')?.dirty || fc('zipCode')?.touched)) {
+      <div class="error-message">
+        @if (fc('zipCode')?.errors?.['required']) { <small>Zip/Postal Code is required.</small> }
+        @if (fc('zipCode')?.errors?.['pattern']) { <small>Invalid Zip/Postal Code format.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- Country -->
+    <div class="form-field">
+      <label for="country">Country <span class="required">*</span></label>
+      <select id="country" formControlName="country">
+        <option value="" disabled>Select Country</option>
+        @for(country of countries; track country.code) {
+        <option [value]="country.code">{{ country.name }}</option>
+        }
+      </select>
+      @if (fc('country')?.invalid && (fc('country')?.dirty || fc('country')?.touched)) {
+      <div class="error-message">
+        @if (fc('country')?.errors?.['required']) { <small>Country is required.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- Phone Number (Optional) -->
+    <div class="form-field">
+      <label for="phoneNumber">Phone Number (Optional)</label>
+      <input type="tel" id="phoneNumber" formControlName="phoneNumber">
+      @if (fc('phoneNumber')?.invalid && (fc('phoneNumber')?.dirty || fc('phoneNumber')?.touched)) {
+      <div class="error-message">
+        @if (fc('phoneNumber')?.errors?.['pattern']) { <small>Invalid phone number format.</small> }
+      </div>
+      }
+    </div>
+
+    <!-- Default Addresses Checkboxes -->
+    <div class="form-field checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="isDefaultShipping">
+        Set as default shipping address
+      </label>
+    </div>
+    <div class="form-field checkbox-group">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="isDefaultBilling">
+        Set as default billing address
+      </label>
+    </div>
+
+
+    <div class="form-actions">
+      <button type="submit" class="button primary" [disabled]="addressForm.invalid || isLoading">
+        {{ isLoading ? 'Saving...' : submitButtonText }}
+      </button>
+      <button type="button" class="button secondary" (click)="onCancel()" [disabled]="isLoading">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div><p>address-form works!</p>

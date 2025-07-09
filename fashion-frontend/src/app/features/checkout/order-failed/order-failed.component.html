@@ -1,0 +1,30 @@
+<!-- src/app/features/checkout/order-failed/order-failed.component.html -->
+<div class="order-status-page container">
+  <!-- Reusing class from success page -->
+  <div class="status-icon failed-icon">
+    <!-- Simple X SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+    </svg>
+  </div>
+  <h1>Order Processing Failed</h1>
+  <p class="order-failure-message">
+    We're sorry, but we were unable to process your order at this time.
+  </p>
+  @if (errorCode === 'capture_failed' && paypalOrderId) {
+  <p>There was an issue finalizing your payment with PayPal (Order ID: {{ paypalOrderId }}). Please try again or contact support.</p>
+  } @else if (errorCode) {
+  <p>An unexpected error occurred (Code: {{ errorCode }}). Please try again or contact our support team.</p>
+  } @else {
+  <p>Please try placing your order again. If the problem persists, contact our customer support.</p>
+  }
+
+  <div class="actions">
+    <button (click)="tryAgain()" class="action-button primary-action">Try Again</button>
+    <button (click)="contactSupport()" class="action-button secondary-action">Contact Support</button>
+  </div>
+
+  <div class="support-info">
+    <p>Reference PayPal Order ID if applicable: {{ paypalOrderId || 'N/A' }}</p>
+  </div>
+</div>

@@ -1,0 +1,162 @@
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.pdp-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.gallery-column .main-image {
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  background-color: #f5f5f5;
+  margin-bottom: 1rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.thumbnails {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+
+  .thumbnail {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    border: 1px solid #eee;
+    object-fit: cover;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.product-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+}
+
+.price-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .price-original {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 1.1rem;
+  }
+
+  .price-current {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #d9534f; // A sale color
+  }
+}
+
+.product-description {
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.variant-selector {
+  margin-bottom: 1.5rem;
+
+  .selector-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+}
+
+.color-swatches {
+  display: flex;
+  gap: 0.5rem;
+
+  .swatch {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    outline: 1px solid #ccc;
+    transition: transform 0.2s ease;
+
+    &.selected {
+      outline-color: #000;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.size-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .size-button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+
+    &.selected {
+      background-color: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    &:disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .out-of-stock-line {
+      position: absolute;
+      top: 50%;
+      left: -1px;
+      right: -1px;
+      height: 1px;
+      background-color: #ccc;
+      transform: rotate(-20deg);
+    }
+  }
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: #333;
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}

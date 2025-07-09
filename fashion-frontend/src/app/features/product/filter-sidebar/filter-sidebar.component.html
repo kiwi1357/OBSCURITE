@@ -1,0 +1,83 @@
+<!-- src/app/features/product/filter-sidebar/filter-sidebar.component.html -->
+<aside class="sidebar">
+  @if (facets) {
+  <!-- Brands Filter Group -->
+  @if (facets.brands && facets.brands.length > 0) {
+  <div class="filter-group">
+    <h3 class="filter-title">Brands</h3>
+    <ul class="filter-list">
+      @for (brand of facets.brands; track trackById($index, brand)) {
+      <li>
+        <label class="checkbox-label">
+          <input type="checkbox"
+                 [(ngModel)]="activeFilters.brands[brand._id]"
+                 (change)="onFilterChange()">
+          {{ brand.name }}
+          <span class="count">({{ brand.count }})</span>
+        </label>
+      </li>
+      } <!-- End @for brand -->
+    </ul>
+  </div>
+  } <!-- End @if facets.brands -->
+  <!-- Categories Filter Group -->
+  @if (facets.categories && facets.categories.length > 0) {
+  <div class="filter-group">
+    <h3 class="filter-title">Categories</h3>
+    <ul class="filter-list">
+      @for (category of facets.categories; track trackById($index, category)) {
+      <li>
+        <label class="checkbox-label">
+          <input type="checkbox"
+                 [(ngModel)]="activeFilters.categories[category._id]"
+                 (change)="onFilterChange()">
+          {{ category.name | translate }}
+          <span class="count">({{ category.count }})</span>
+        </label>
+      </li>
+      } <!-- End @for category -->
+    </ul>
+  </div>
+  } <!-- End @if facets.categories -->
+  <!-- Colors Filter Group -->
+  @if (facets.colors && facets.colors.length > 0) {
+  <div class="filter-group">
+    <h3 class="filter-title">Colors</h3>
+    <ul class="filter-list">
+      @for (color of facets.colors; track trackById($index, color)) {
+      <li>
+        <label class="checkbox-label">
+          <input type="checkbox"
+                 [(ngModel)]="activeFilters.colors[color.name.toLowerCase()]"
+                 (change)="onFilterChange()">
+          {{ color.name | titlecase }}
+          <span class="count">({{ color.count }})</span>
+        </label>
+      </li>
+      } <!-- End @for color -->
+    </ul>
+  </div>
+  } <!-- End @if facets.colors -->
+  <!-- Sizes Filter Group -->
+  @if (facets.sizes && facets.sizes.length > 0) {
+  <div class="filter-group">
+    <h3 class="filter-title">Sizes</h3>
+    <ul class="filter-list">
+      @for (size of facets.sizes; track trackByName($index, size)) {
+      <li>
+        <label class="checkbox-label">
+          <input type="checkbox"
+                 [(ngModel)]="activeFilters.sizes[size.name.toUpperCase()]"
+                 (change)="onFilterChange()"> <!-- This is the input in question (around line 72 of this snippet) -->
+          {{ size.name }}
+          <span class="count">({{ size.count }})</span>
+        </label>
+      </li>
+      } <!-- End @for size -->
+    </ul>
+  </div>
+  } <!-- End @if facets.sizes -->
+  } @else { <!-- End @if facets -->
+  <p>Loading filters...</p>
+  }
+</aside>

@@ -1,0 +1,23 @@
+<div class="not-found-container">
+  <div class="content-wrapper">
+    <h1>Doh! The page you're looking for can't be found.</h1>
+
+    <p class="subtitle">
+      Try using the search or links above to help you find what you're looking for.
+    </p>
+
+    <div class="search-section">
+      <p>Feeling stumped? Just try another search!</p>
+
+      <!-- The search form -->
+      <form class="search-form" (ngSubmit)="onSearch()">
+        <input type="text"
+               placeholder="Search"
+               [(ngModel)]="searchTerm"
+               name="searchTerm"
+               aria-label="Search Input" />
+        <button type="submit" aria-label="Submit Search">Search</button>
+      </form>
+    </div>
+  </div>
+</div>

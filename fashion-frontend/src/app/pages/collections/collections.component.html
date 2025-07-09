@@ -1,0 +1,34 @@
+<!-- src/app/pages/collections/collections.component.html -->
+<div class="collections-container">
+  <div class="page-header">
+    <h1>Our Collections</h1>
+    <p>Discover curated styles and the stories behind our latest designs.</p>
+  </div>
+
+  @if (lookbooks$ | async; as lookbooks) {
+  @if (lookbooks.length > 0) {
+  <div class="collections-grid">
+    @for (lookbook of lookbooks; track lookbook._id) {
+    <a class="collection-card"
+       [routerLink]="['/', lang, 'search']"
+       [queryParams]="{ lookbook: lookbook.slug }">
+
+      <div class="card-image-wrapper">
+        <img [src]="lookbook.bannerImage" [alt]="lookbook.title | translate" />
+      </div>
+
+      <div class="card-content">
+        <h2 class="card-title">{{ lookbook.title | translate }}</h2>
+        <p class="card-description">{{ lookbook.description | translate }}</p>
+        <span class="card-cta">View Collection →</span>
+      </div>
+    </a>
+    }
+  </div>
+  } @else {
+  <p class="no-collections-message">No collections are available at this time. Please check back soon!</p>
+  }
+  } @else {
+  <p>Loading collections...</p>
+  }
+</div>

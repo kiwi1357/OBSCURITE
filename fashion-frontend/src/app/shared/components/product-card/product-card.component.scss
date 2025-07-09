@@ -1,0 +1,127 @@
+:host {
+  display: block;
+}
+
+a.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+.card {
+  border: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-image-container {
+  width: 100%;
+  aspect-ratio: 1 / 1.25;
+  background-color: #f7f7f7;
+  position: relative;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+.card-content {
+  padding: 1rem 0.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.5px;
+}
+
+// .color-swatches styles have been removed
+
+.card-price {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  margin-top: auto;
+}
+
+/* Add these styles at the end of the file */
+:host-context(.list-view) .card {
+  flex-direction: row;
+  align-items: center;
+}
+
+:host-context(.list-view) .card-image-container {
+  width: 150px; // Fixed width in list view
+  height: 200px;
+  flex-shrink: 0;
+}
+
+:host-context(.list-view) .card-content {
+  text-align: left;
+  padding: 1rem 2rem;
+  align-items: flex-start;
+}
+
+:host-context(.list-view) .card-price {
+  margin-top: 1rem;
+}
+
+.card-image-container {
+  position: relative; // Needed for positioning the wishlist button
+  overflow: hidden;
+  // Add a wishlist button
+  .wishlist-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      background-color: #fff;
+      transform: scale(1.1);
+    }
+
+    .icon-heart {
+      width: 20px;
+      height: 20px;
+      stroke: var(--color-text-primary);
+      fill: none; // Default state is just an outline
+      transition: fill 0.2s ease, stroke 0.2s ease;
+    }
+    // Style for when the item is in the wishlist
+    &.in-wishlist {
+      .icon-heart {
+        fill: var(--color-accent-red); // Fill with red when active
+        stroke: var(--color-accent-red);
+      }
+    }
+  }
+}

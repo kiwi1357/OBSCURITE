@@ -1,0 +1,14 @@
+<!-- src/app/shared/components/lookbook/lookbook.component.html -->
+@if (lookbook) {
+<section class="lookbook-section">
+  <div class="lookbook-header">
+    <h2 class="lookbook-title">{{ lookbook.title | translate }}</h2>
+    <p class="lookbook-description">{{ lookbook.description | translate }}</p>
+    <button class="explore-button" (click)="exploreCollection()">
+      Explore The Collection
+    </button>
+  </div>
+
+  <app-product-carousel [products]="lookbook.products ?? []" />
+</section>
+}

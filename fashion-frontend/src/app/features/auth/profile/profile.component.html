@@ -1,0 +1,119 @@
+<!-- Breadcrumbs Component -->
+<app-breadcrumb [crumbs]="breadcrumbs" [lang]="(languageService.activeLang$ | async) || 'en'"></app-breadcrumb>
+
+<div class="account-dashboard-container">
+  <div class="account-main-header">
+    <h1>My Account - Dashboard</h1>
+    <button (click)="logout()" class="logout-link-button">LOGOUT</button>
+  </div>
+
+  <div class="account-content-grid">
+    <!-- Left Column -->
+    <div class="account-column">
+      <!-- Profile Section -->
+      <section class="account-section profile-section">
+        <div class="section-header">
+          <div class="section-title-container">
+            <i class="icon-profile"></i>
+            <h2>PROFILE</h2>
+          </div>
+        </div>
+        @if (user$ | async; as user) {
+        <div class="section-content">
+          <div class="detail-item">
+            <span class="detail-label">Name</span>
+            <span class="detail-value">{{ user.username || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Email</span>
+            <span class="detail-value">{{ user.email }}</span>
+          </div>
+        </div>
+        } @else {
+        <div class="section-content">
+          <p>Loading profile...</p>
+        </div>
+        }
+      </section>
+
+      <!-- Preferences Section -->
+      <section class="account-section preferences-section">
+        <div class="section-header">
+          <div class="section-title-container">
+            <i class="icon-preferences"></i>
+            <h2>PREFERENCES</h2>
+          </div>
+        </div>
+        <div class="section-content">
+          <div class="newsletter-promo-box">
+            <i class="icon-newsletter-big"></i>
+            <p>Get 15% off your first order as a Newsletter subscriber</p>
+            <button class="action-button" (click)="signUpForNewsletter()">SIGN UP FOR NEWSLETTER</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column -->
+    <div class="account-column">
+      <!-- Password Section -->
+      <section class="account-section password-section">
+        <div class="section-header">
+          <div class="section-title-container">
+            <i class="icon-password"></i>
+            <h2>PASSWORD</h2>
+          </div>
+        </div>
+        <div class="section-content">
+          <div class="detail-item">
+            <span class="detail-label">Password</span>
+            <span class="detail-value">**********</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Order History Section - UPDATED WITH LINKS -->
+      <section class="account-section order-history-section">
+        <div class="section-header">
+          <div class="section-title-container">
+            <i class="icon-order-history"></i>
+            <h2>RECENT ORDERS</h2>
+          </div>
+          <a [routerLink]="['/', (languageService.activeLang$ | async), 'account', 'orders']" class="edit-link">VIEW ALL</a>
+        </div>
+
+        @if (orders$ | async; as orders) {
+        @if(orders.length > 0) {
+        <div class="section-content orders-list">
+          <!-- Show first 3 orders as a preview -->
+          @for(order of orders.slice(0, 3); track order.customOrderId) {
+          <a class="order-summary-card" [routerLink]="['/', (languageService.activeLang$ | async), 'account', 'orders', order.customOrderId]">
+            <div class="order-info">
+              <span class="order-id">#{{ order.customOrderId }}</span>
+              <span class="order-date">{{ order.orderDate | date:'mediumDate' }}</span>
+            </div>
+            <div class="order-details">
+              <span class="order-total">{{ order.grandTotal | currency:'EUR' }}</span>
+              <span class="order-status" [ngClass]="order.status.toLowerCase().replace(' ', '-')">{{ order.status }}</span>
+              <span class="view-details-link">View Details →</span>
+            </div>
+          </a>
+          }
+        </div>
+        } @else {
+        <div class="section-content empty-state">
+          <i class="icon-cart-big"></i>
+          <p class="empty-state-main-text">Oops - nothing to see here (yet).</p>
+          <p class="empty-state-sub-text">Ready to start shopping?</p>
+          <button class="action-button" [routerLink]="['/', (languageService.activeLang$ | async)]">START SHOPPING</button>
+        </div>
+        }
+        } @else if(isLoadingOrders) {
+        <div class="section-content"><p>Loading orders...</p></div>
+        } @else if(ordersError) {
+        <div class="section-content error-state"><p>{{ ordersError }}</p></div>
+        }
+      </section>
+    </div>
+  </div>
+</div>

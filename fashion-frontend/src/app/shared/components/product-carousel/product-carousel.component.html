@@ -1,0 +1,18 @@
+<!-- src/app/shared/components/product-carousel/product-carousel.component.html -->
+<div class="carousel-wrapper">
+  <!-- Previous Button -->
+  <button class="nav-arrow prev" [class.visible]="showPrevButton" (click)="scrollBy('prev')" aria-label="Previous">
+    <span><</span>
+  </button>
+
+  <div class="carousel-container" #carousel (scroll)="checkScroll()">
+    <div class="carousel-item" *ngFor="let product of products; trackBy: trackById">
+      <app-product-card [product]="product"></app-product-card>
+    </div>
+  </div>
+
+  <!-- Next Button -->
+  <button class="nav-arrow next" [class.visible]="showNextButton" (click)="scrollBy('next')" aria-label="Next">
+    <span>></span>
+  </button>
+</div>

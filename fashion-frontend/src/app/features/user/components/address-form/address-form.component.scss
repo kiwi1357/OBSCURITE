@@ -1,0 +1,112 @@
+// src/app/features/user/components/address-form/address-form.component.scss
+.address-form-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  max-width: 600px; // Or adjust as needed
+  margin: 20px auto; // Center it for standalone view
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
+  }
+}
+
+.form-field {
+  margin-bottom: 15px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #444;
+
+    .required {
+      color: red;
+    }
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+
+    &:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  &.checkbox-group {
+    label.checkbox-label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+      font-size: 0.9rem;
+
+      input[type="checkbox"] {
+        width: auto;
+        margin-right: 8px;
+        accent-color: #000; // Or your brand color
+      }
+    }
+  }
+}
+
+.error-message {
+  margin-top: 5px;
+
+  small {
+    color: red;
+    font-size: 0.8rem;
+  }
+}
+
+.form-actions {
+  margin-top: 25px;
+  display: flex;
+  gap: 10px;
+
+  .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+
+    &.primary {
+      background-color: #000;
+      color: #fff;
+
+      &:hover:not(:disabled) {
+        background-color: #333;
+      }
+    }
+
+    &.secondary {
+      background-color: #e0e0e0;
+      color: #333;
+
+      &:hover:not(:disabled) {
+        background-color: #ccc;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

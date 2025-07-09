@@ -1,0 +1,86 @@
+<!-- src/app/shared/components/order-detail-display/order-detail-display.component.html -->
+@if(order) {
+<div class="order-details-container">
+  <div class="order-summary-header">
+    <h1>Order Details</h1>
+    <div class="header-info">
+      <span>Order #{{ order.customOrderId }}</span>
+      <span class="separator">|</span>
+      <span>Placed on {{ order.orderDate | date:'longDate' }}</span>
+    </div>
+  </div>
+
+  <div class="order-layout">
+    <!-- Left Column: Items and Totals -->
+    <div class="order-main-content">
+      <div class="order-section items-section">
+        <h2 class="section-title">Items in your order ({{order.items.length}})</h2>
+        @for(item of order.items; track item.sku) {
+        <div class="order-item-card">
+          <div class="item-image">
+            <img [src]="item.imageUrl || '/uploads/placeholder.png'" alt="{{item.name}}">
+          </div>
+          <div class="item-info">
+            <p class="item-name">{{ item.name }}</p>
+            <p class="item-variant">{{ item.variantInfo }}</p>
+            <p class="item-sku">SKU: {{ item.sku }}</p>
+            <p class="item-quantity">Quantity: {{ item.quantity }}</p>
+          </div>
+          <div class="item-price">
+            {{ item.price * item.quantity | currency:'EUR' }}
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="order-section totals-section">
+        <h2 class="section-title">Payment Summary</h2>
+        <div class="totals-grid">
+          <div class="cost-line">
+            <span>Subtotal</span>
+            <span>{{ order.subTotal | currency:'EUR' }}</span>
+          </div>
+          @if(order.appliedPromoCode) {
+          <div class="cost-line discount">
+            <span>Discount ({{order.appliedPromoCode.code}})</span>
+            <span>- {{ order.discountAmount | currency:'EUR' }}</span>
+          </div>
+          }
+          <div class="cost-line">
+            <span>Shipping ({{order.shippingInfo.method}})</span>
+            <span>{{ order.shippingInfo.cost | currency:'EUR' }}</span>
+          </div>
+          <div class="cost-line total">
+            <span>Grand Total</span>
+            <span>{{ order.grandTotal | currency:'EUR' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Shipping Info -->
+    <div class="order-sidebar">
+      <div class="order-section address-section">
+        <h2 class="section-title">Shipping Address</h2>
+        <div class="address-details">
+          <p>{{ order.customerDetails.shippingAddress.fullName }}</p>
+          <p>{{ order.customerDetails.shippingAddress.addressLine1 }}</p>
+          @if(order.customerDetails.shippingAddress.addressLine2){
+          <p>{{ order.customerDetails.shippingAddress.addressLine2 }}</p>
+          }
+          <p>
+            {{ order.customerDetails.shippingAddress.city }}, {{ order.customerDetails.shippingAddress.state }} {{
+            order.customerDetails.shippingAddress.zipCode
+            }}
+          </p>
+          <p>{{ order.customerDetails.shippingAddress.country }}</p>
+        </div>
+      </div>
+      <div class="order-section status-section">
+        <h2 class="section-title">Order Status</h2>
+        <p class="order-status" [ngClass]="order.status.toLowerCase().replace(' ', '-')">{{ order.status }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FashionFrontend</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AXigBOUAvuzV7WR3gOGA3sz0bMCUOg6wDdwCDafEU7WDZ5R2AfEDgqYffipt3Vzv42broAnyYrmprhXZ&currency=EUR&intent=capture"></script>
+  <!--
+    Explanation of parameters:
+    client-id: Your PayPal Sandbox Client ID
+    currency: The currency for transactions (e.g., EUR, USD)
+    intent=capture: To capture payment immediately after buyer approval.
+                    Use intent=authorize if you want to authorize payment and capture later.
+  -->
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

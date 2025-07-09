@@ -1,0 +1,46 @@
+// src/app/shared/components/breadcrumb/breadcrumb.component.scss
+
+.breadcrumb-nav {
+  font-family: Arial, sans-serif; // Or your desired font
+  font-size: 1em; // Adjust as needed
+  padding: 10px 0; // Add some padding if desired
+
+  .breadcrumb-link {
+    color: #000000; // Default black color for links
+    text-decoration: none; // Remove underline
+    font-weight: bold;
+    margin: 0 5px; // Add some margin around links
+    transition: color 0.3s ease; // Smooth transition for hover effect
+
+    &:hover {
+      color: #a07d5a; // Brownish color on hover (adjust as needed)
+      // text-decoration: underline; // Optionally add underline on hover if you prefer
+    }
+  }
+
+  .separator {
+    color: #b0b0b0; // Light gray for the separator dot
+    margin: 0 5px; // Space around the separator
+    font-weight: bold; // Make separator bold to match link text style
+  }
+
+  .active-crumb {
+    color: #808080; // Grayish color for the active (last) crumb
+    font-weight: bold;
+    margin: 0 5px; // Add some margin around the active crumb
+  }
+}
+
+// Ensure the very first link (Home) also gets the link styling
+// if it's not covered by .breadcrumb-link (though it should be now)
+.breadcrumb-nav > a:first-child {
+  color: #000000;
+  text-decoration: none;
+  font-weight: bold;
+  margin-right: 5px; // Only right margin needed before the first separator
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #a07d5a;
+  }
+}

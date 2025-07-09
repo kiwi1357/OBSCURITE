@@ -1,0 +1,141 @@
+<!-- src/app/features/product/product-detail/product-detail.component.html -->
+<div class="pdp-page-container">
+  <app-breadcrumb [crumbs]="breadcrumbs" [lang]="currentLang" />
+
+  <div class="pdp-main-content container">
+    @if (isLoading) {
+    <p class="loading-text">Loading product...</p>
+    } @else if (product && selectedVariant) {
+    <div class="pdp-layout">
+
+      <!-- Left Column: Image Gallery -->
+      <div class="gallery-column" #galleryColumn>
+        <div class="thumbnails-container">
+          @for (image of selectedVariant.images; track image; let i = $index) {
+          @if (i < 6) { <!-- Show up to 6 thumbnails -->
+          <div class="thumbnail-item"
+               (click)="setMainImage(image)"
+               [class.active]="image === selectedVariant.images[0]">
+            <img [src]="image" [alt]="(product.name | translate) + ' - view ' + (i + 1)">
+          </div>
+          }
+          }
+        </div>
+        <div class="main-image-container">
+          <img [src]="selectedVariant.images[0]" [alt]="product.name | translate" class="main-product-image">
+        </div>
+      </div>
+
+      <!-- Right Column: Product Details & Actions -->
+      <div class="details-column" #detailsColumn
+           [class.sticky]="isDetailsSticky"
+           [style.top.px]="isDetailsSticky ? 80 : 'auto'">
+
+        <h1 class="product-title">{{ product.name | translate }}</h1>
+
+        <div class="price-section">
+          @if (selectedVariant.priceOriginal && selectedVariant.price < selectedVariant.priceOriginal) {
+          <span class="price-original">{{ selectedVariant.priceOriginal | currency:'EUR' }}</span>
+          }
+          <span class="price-current">{{ selectedVariant.price | currency:'EUR' }}</span>
+          <p class="vat-info">Price incl. VAT, plus <a [routerLink]="['/', currentLang, 'shipping-info']">shipping costs</a>.</p>
+        </div>
+
+        <div class="selector-group color-selector">
+          <label>Colour: <span class="selected-value">{{ selectedVariant.color.name | translate }}</span></label>
+          <div class="swatches color-swatches">
+            @for (variant of product.variants; track variant._id) {
+            @if (variant.isActive) {
+            <button class="swatch color-swatch"
+                    [class.selected]="variant._id === selectedVariant._id"
+                    (click)="selectVariant(variant._id)"
+                    [title]="variant.color.name | translate">
+              <img [src]="variant.images[0]" [alt]="variant.color.name | translate">
+            </button>
+            }
+            }
+          </div>
+        </div>
+
+        <div class="selector-group size-selector">
+          <div class="size-header">
+            <label>Size:</label>
+            <a [routerLink]="['/', currentLang, 'size-guide']" class="size-guide-link">SIZE GUIDE</a>
+          </div>
+          <div class="swatches size-swatches">
+            @for (size of selectedVariant.sizes; track size.sku) {
+            <button class="swatch size-button"
+                    [disabled]="size.stock === 0"
+                    [class.selected]="size.sku === selectedSize?.sku"
+                    (click)="selectSize(size)"
+                    [class.out-of-stock]="size.stock === 0">
+              {{ size.size }}
+            </button>
+            }
+          </div>
+          @if (selectedSize && selectedSize.stock > 0 && selectedSize.stock <= 5) {
+          <small class="low-stock-warning">Only {{selectedSize.stock}} left in stock!</small>
+          }
+          @if (selectedSize && selectedSize.stock === 0) {
+          <small class="out-of-stock-message">This size is out of stock.</small>
+          }
+        </div>
+
+        <div class="quantity-selector-group">
+          <label for="quantity">Quantity:</label>
+          <div class="quantity-input-wrapper">
+            <button (click)="decrementQuantity()" [disabled]="quantity <= 1" aria-label="Decrease quantity">-</button>
+            <input type="number" id="quantity" [(ngModel)]="quantity" min="1" (change)="quantity = quantity < 1 ? 1 : quantity" aria-label="Product quantity">
+            <button (click)="incrementQuantity()" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+
+        <div class="actions-row">
+          <button class="add-to-cart-btn" (click)="addToCart()" [disabled]="!selectedSize || selectedSize?.stock === 0">
+            ADD TO CART
+          </button>
+          @if (isLoggedIn$ | async) {
+          <button class="wishlist-btn"
+                  (click)="toggleWishlist()"
+                  [attr.aria-label]="(isInWishlist$ | async) ? 'Remove from Wishlist' : 'Add to Wishlist'"
+                  [class.in-wishlist]="isInWishlist$ | async">
+            <svg class="icon-svg icon-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+          }
+        </div>
+
+        <div class="product-details-accordion">
+          <div class="accordion-item">
+            <button class="accordion-header" (click)="toggleAccordion('description')" [attr.aria-expanded]="accordionOpen['description']">
+              Description
+              <span class="accordion-icon">{{ accordionOpen['description'] ? '-' : '+' }}</span>
+            </button>
+            @if (accordionOpen['description']) {
+            <div class="accordion-content">
+              <p [innerHTML]="product.description | translate"></p>
+            </div>
+            }
+          </div>
+          <div class="accordion-item">
+            <button class="accordion-header" (click)="toggleAccordion('materials')" [attr.aria-expanded]="accordionOpen['materials']">
+              Material & Care
+              <span class="accordion-icon">{{ accordionOpen['materials'] ? '-' : '+' }}</span>
+            </button>
+            @if (accordionOpen['materials']) {
+            <div class="accordion-content">
+              <p>Details about materials and care instructions would go here.</p>
+            </div>
+            }
+          </div>
+        </div>
+
+        @if (product.category) {
+        <div class="product-meta">Category: <a [routerLink]="['/', currentLang, 'category', product.category.slug]">{{product.category.name | translate}}</a></div>
+        }
+      </div>
+    </div>
+    } @else if (!isLoading) {
+    <app-not-found />
+    }
+  </div>
+</div>

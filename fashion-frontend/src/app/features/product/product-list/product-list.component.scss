@@ -1,0 +1,152 @@
+
+.filter-backdrop {
+  position: fixed; // Makes it cover the whole screen
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1500; // Ensures it's above the page content
+}
+
+.filter-sidebar-container {
+  position: fixed; // Makes it break out of the normal document flow
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px; // Or your desired width
+  background-color: #fff;
+  z-index: 1600; // Ensures it's on top of the backdrop
+  box-shadow: 4px 0 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  // Add animation for a smooth slide-in
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  // This class will be added by Angular to slide it into view
+  &.is-open {
+    transform: translateX(0);
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eaeaea;
+  flex-shrink: 0;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+  }
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+}
+
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.view-toggle-buttons {
+  display: inline-flex;
+  button {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    &:first-child {
+      border-right: none;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+    &.active {
+      background-color: #000;
+      color: #fff;
+      border-color: #000;
+    }
+  }
+}
+
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
+}
+
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.view-toggle-buttons {
+  display: inline-flex;
+
+  button {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+
+    &:first-child {
+      border-right: none;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    &.active {
+      background-color: #000;
+      color: #fff;
+      border-color: #000;
+    }
+  }
+}
+
+.product-container {
+  &.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  &.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

@@ -1,0 +1,151 @@
+<!-- src/app/features/checkout/checkout-page/checkout-page.component.html -->
+<div class="checkout-container container">
+  <div class="checkout-layout">
+    <!-- Left Column: Shipping & Payment Details -->
+    <div class="checkout-main">
+      <div class="logo-header">
+        <a [routerLink]="['/', languageService.activeLang$.value]">OBSCURITÉ</a>
+      </div>
+
+      <!-- Step Indicator (Simplified) -->
+      <nav class="checkout-breadcrumbs">
+        <span [class.active]="currentStep === 'shipping'">Shipping</span>
+        <span>></span>
+        <span [class.active]="currentStep === 'payment'">Payment</span>
+      </nav>
+
+      @if (isLoading) {
+      <p>Loading checkout...</p>
+      } @else {
+      <!-- Shipping Details Section -->
+      <section *ngIf="currentStep === 'shipping'">
+        @if (isLoggedIn) {
+        <!-- LOGGED-IN USER ADDRESS SELECTION -->
+        <div class="checkout-section">
+          <div class="section-header">
+            <h2>Shipping Address</h2>
+            <a [routerLink]="['/', languageService.activeLang$.value, 'login']" class="not-you-link">Not you? Log out</a>
+          </div>
+
+          @if(userAddressData$ | async; as addressData) {
+          @if (addressData.addresses.length > 0 && !showNewAddressForm) {
+          <div class="address-selection-list">
+            @for(address of addressData.addresses; track address._id) {
+            <div class="address-option" [class.selected]="address._id === selectedShippingAddressId" (click)="preselectAddress(address._id!)">
+              <input type="radio" name="shippingAddress" [value]="address._id" [checked]="address._id === selectedShippingAddressId">
+              <div class="address-details">
+                <strong>{{address.fullName}}</strong>
+                <p>{{address.addressLine1}}, {{address.city}} {{address.zipCode}}</p>
+              </div>
+            </div>
+            }
+          </div>
+          <button class="button secondary add-new-btn" (click)="showNewAddressForm = true">Add a New Address</button>
+          }
+
+          @if (showNewAddressForm || addressData.addresses.length === 0) {
+          <app-address-form [formTitle]="addressData.addresses.length === 0 ? 'Add Shipping Address' : 'Add New Shipping Address'"
+                            (formSubmit)="handleAddressFormSubmit($event)"
+                            (cancel)="showNewAddressForm = false"
+                            [isLoading]="isSubmitting">
+          </app-address-form>
+          }
+          }
+        </div>
+        } @else {
+        <!-- GUEST USER ADDRESS FORM -->
+        <div class="checkout-section">
+          <div class="section-header">
+            <h2>Contact Information</h2>
+            <span>Already have an account? <a [routerLink]="['/', languageService.activeLang$.value, 'login']">Log in</a></span>
+          </div>
+          <form [formGroup]="checkoutForm">
+            <div class="form-field">
+              <input type="email" placeholder="Email" formControlName="email">
+            </div>
+
+            <h2 class="form-section-title">Shipping Address</h2>
+            <div formGroupName="shippingAddress" class="address-form-grid">
+              <div class="form-field full-width">
+                <input type="text" placeholder="Full Name" formControlName="fullName">
+              </div>
+              <div class="form-field full-width">
+                <input type="text" placeholder="Address" formControlName="addressLine1">
+              </div>
+              <div class="form-field full-width">
+                <input type="text" placeholder="Apartment, suite, etc. (optional)" formControlName="addressLine2">
+              </div>
+              <div class="form-field">
+                <input type="text" placeholder="City" formControlName="city">
+              </div>
+              <div class="form-field">
+                <input type="text" placeholder="Postal Code" formControlName="zipCode">
+              </div>
+              <div class="form-field">
+                <input type="text" placeholder="State/Province" formControlName="state">
+              </div>
+              <div class="form-field">
+                <select formControlName="country">
+                  <option value="DE">Germany</option>
+                  <option value="AT">Austria</option>
+                  <option value="CH">Switzerland</option>
+                </select>
+              </div>
+              <div class="form-field full-width">
+                <input type="tel" placeholder="Phone (optional)" formControlName="phoneNumber">
+              </div>
+            </div>
+          </form>
+        </div>
+        }
+
+        <!-- Shipping Method Section -->
+        <div class="checkout-section">
+          <div class="section-header">
+            <h2>Shipping Method</h2>
+          </div>
+          <div class="shipping-method-option selected">
+            <div class="method-name">
+              <span>Standard Shipping</span>
+              <small>4-6 working days</small>
+            </div>
+            <div class="method-price">
+              {{ (cart$ | async)?.shippingCost === 0 ? 'FREE' : ((cart$ | async)?.shippingCost | currency:'EUR') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-actions">
+          <button class="button primary continue-btn" (click)="proceedToPayment()" [disabled]="isSubmitting">
+            {{ isSubmitting ? 'Processing...' : 'Continue to Payment' }}
+          </button>
+          <a [routerLink]="['/', languageService.activeLang$.value, 'cart']" class="back-link">Return to cart</a>
+        </div>
+
+      </section>
+
+      <!-- Payment Details Section (Placeholder) -->
+      <section *ngIf="currentStep === 'payment'">
+        <div class="checkout-section payment-section">
+          <div class="section-header">
+            <h2>Payment</h2>
+            <p>All transactions are secure and encrypted.</p>
+          </div>
+          <div class="payment-placeholder">
+            <p>Payment options (e.g., Credit Card, PayPal) will be displayed here.</p>
+            <button class="button secondary" (click)="currentStep = 'shipping'">Go back to shipping</button>
+          </div>
+        </div>
+      </section>
+      }
+
+    </div>
+
+    <!-- Right Column: Order Summary -->
+    <div class="checkout-summary">
+      @if(cart$ | async; as cart) {
+      <app-order-summary [cart]="cart"></app-order-summary>
+      }
+    </div>
+  </div>
+</div>

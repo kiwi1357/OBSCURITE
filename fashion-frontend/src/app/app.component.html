@@ -1,0 +1,18 @@
+<!-- src/app/app.component.html -->
+<app-header (menuToggle)="onMenuToggle()" (cartToggle)="onCartToggle()" />
+
+<main [class.sidebar-open]="isSideNavOpen || isCartSidebarOpen">
+  <router-outlet />
+</main>
+
+<app-footer />
+
+@if (isSideNavOpen) {
+<app-side-nav [isOpen]="isSideNavOpen"
+              (closeNav)="onSideNavClose()" />
+}
+
+@if (isCartSidebarOpen) {
+<app-cart-sidebar [isOpen]="isCartSidebarOpen"
+                  (closeCart)="onCartSidebarClose()" />
+}

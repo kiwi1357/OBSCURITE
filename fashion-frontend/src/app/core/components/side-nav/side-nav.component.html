@@ -1,0 +1,59 @@
+<!-- src/app/core/components/side-nav/side-nav.component.html -->
+@if (isOpen) {
+<div class="backdrop" (click)="close()"></div>
+
+<aside class="sidenav-container" [class.is-open]="isOpen">
+  <div class="panel dynamic-menu-panel">
+    <!-- This panel must take full height/width of aside -->
+    <div class="panel-header">
+      @if (navStack.length > 0) {
+      <button class="back-btn" (click)="goBack()">< Back</button>
+      } @else {
+      <div class="header-spacer"></div>
+      }
+      <h4>{{ currentPanelTitle | translate }}</h4>
+      <button class="close-btn" (click)="close()">✕</button>
+    </div>
+
+    <div class="panel-body">
+      <!-- This body must grow to fill remaining space -->
+      @if (currentDisplayLevelCategories && currentDisplayLevelCategories.length > 0) {
+      <ul>
+        @if (currentParentForDisplay) {
+        <li>
+          <a class="view-all-link"
+             [routerLink]="['/', lang, 'category', currentParentForDisplay.slug]"
+             (click)="close()">
+            View All {{ currentParentForDisplay.name | translate }}
+          </a>
+        </li>
+        }
+
+        @for (category of currentDisplayLevelCategories; track category._id) {
+        <li>
+          <a (click)="selectCategory(category)"
+             [routerLink]="(category.children && category.children.length > 0) ? null : ['/', lang, 'category', category.slug]"
+             [style.cursor]="'pointer'">
+            {{ category.name | translate }}
+            @if (category.children && category.children.length > 0) {
+            <span class="chevron">></span>
+            }
+          </a>
+        </li>
+        }
+      </ul>
+      } @else {
+      @if (allRootCategories.length === 0 && navStack.length === 0) {
+      <p class="state-message">Loading categories...</p>
+      } @else if (navStack.length === 0 && allRootCategories.length > 0 && currentDisplayLevelCategories.length === 0 && allRootCategories.length > 0) {
+      <p class="state-message">No categories to display.</p>
+      } @else if (navStack.length > 0 && currentDisplayLevelCategories.length === 0) {
+      <p class="state-message">No sub-categories here.</p>
+      } @else {
+      <p class="state-message">Loading...</p> <!-- Generic fallback -->
+      }
+      }
+    </div>
+  </div>
+</aside>
+}

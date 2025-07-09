@@ -1,0 +1,21 @@
+<app-hero />
+
+<div class="container">
+  @if (!isLoading) {
+
+  <!-- Render the full lookbook component if the data exists -->
+  @if (trendingLookbook) {
+  <app-lookbook [lookbook]="trendingLookbook" />
+  }
+
+  <!-- You could easily add more lookbooks here -->
+  <!--
+  @if (newArrivalsLookbook) {
+    <app-lookbook [lookbook]="newArrivalsLookbook" />
+  }
+  -->
+  } @else {
+  <!-- A simple loading indicator -->
+  <p>Loading featured collections...</p>
+  }
+</div>

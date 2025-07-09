@@ -1,0 +1,135 @@
+// src/app/shared/components/order-summary/order-summary.component.scss
+
+@import '../../../../styles/variables';
+
+.summary-container {
+  background-color: var(--background-color-light);
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: fit-content; // Important for sticking if we add that later
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .toggle-icon {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+}
+
+.summary-items {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+
+  &.visible {
+    max-height: 1000px; // A large enough value to show all items
+    padding-top: 1rem;
+    border-bottom: 1px solid var(--border-color-light);
+  }
+}
+
+.summary-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+
+  .item-image {
+    position: relative;
+    flex-shrink: 0;
+
+    img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border-color-light);
+    }
+
+    .item-quantity-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: var(--secondary-color);
+      color: var(--text-color-dark);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+  }
+
+  .item-info {
+    flex-grow: 1;
+
+    .item-name {
+      font-weight: 500;
+      margin: 0 0 0.25rem 0;
+    }
+
+    .item-variant {
+      font-size: 0.85rem;
+      color: var(--text-color-medium);
+      margin: 0;
+    }
+  }
+
+  .item-price {
+    font-weight: 500;
+  }
+}
+
+.summary-costs {
+  padding-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .cost-line {
+    display: flex;
+    justify-content: space-between;
+
+    &.discount {
+      color: var(--success-color);
+    }
+
+    &.total {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color-light);
+    }
+  }
+
+  .vat-notice {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--text-color-light);
+  }
+}
+
+@media (max-width: $tablet-breakpoint) {
+  .summary-container {
+    // On mobile, items are shown by default
+    .summary-items {
+      max-height: 1000px;
+      padding-top: 1rem;
+      border-bottom: 1px solid var(--border-color-light);
+    }
+  }
+}

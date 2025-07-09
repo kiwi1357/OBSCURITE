@@ -1,0 +1,79 @@
+<!-- src/app/features/user/pages/address-book/address-book.component.html -->
+<app-breadcrumb [crumbs]="breadcrumbs" [lang]="currentLang"></app-breadcrumb>
+
+<div class="address-book-container">
+  <div class="address-book-header">
+    <h2>My Address Book</h2>
+    <button class="button primary" (click)="openAddAddressForm()" [disabled]="showAddressForm || isLoading">Add New Address</button>
+  </div>
+
+  @if (userAddressData$ | async; as data) {
+  <!-- This 'data' variable is now available within this @if block -->
+  @if (isLoading && !data) { <!-- Show loading only if data is not yet available -->
+  <p>Loading addresses...</p>
+  } @else if (data && data.addresses && data.addresses.length > 0) {
+  <div class="address-list">
+    @for (address of data.addresses; track address._id) {
+    <div class="address-card"
+         [class.default-shipping]="address._id === data.defaultShippingAddressId"
+         [class.default-billing]="address._id === data.defaultBillingAddressId">
+      <div class="address-card-header">
+        <strong>{{ address.addressName || 'Address' }}</strong>
+        <div class="default-tags">
+          @if (address._id === data.defaultShippingAddressId) { <span class="tag default-shipping-tag">Default Shipping</span> }
+          @if (address._id === data.defaultBillingAddressId) { <span class="tag default-billing-tag">Default Billing</span> }
+        </div>
+      </div>
+      <div class="address-card-body">
+        <p>{{ address.fullName }}</p>
+        <p>{{ address.addressLine1 }}</p>
+        @if (address.addressLine2) { <p>{{ address.addressLine2 }}</p> }
+        <p>{{ address.city }}, {{ address.state }} {{ address.zipCode }}</p>
+        <p>{{ address.country }}</p> <!-- Consider converting country code to name -->
+        @if (address.phoneNumber) { <p>Phone: {{ address.phoneNumber }}</p> }
+      </div>
+      <div class="address-card-actions">
+        <button class="button-link" (click)="openEditAddressForm(address)">Edit</button>
+        <button class="button-link delete" (click)="deleteAddress(address._id)">Delete</button>
+        @if (address._id !== data.defaultShippingAddressId) {
+        <button class="button-link set-default" (click)="setDefault(address._id, 'shipping')">Set as Shipping Default</button>
+        }
+        @if (address._id !== data.defaultBillingAddressId) {
+        <button class="button-link set-default" (click)="setDefault(address._id, 'billing')">Set as Billing Default</button>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  } @else if (data && (!data.addresses || data.addresses.length === 0)) {
+  <p class="no-addresses-message">You have no saved addresses. Add one to get started!</p>
+  } @else if (formError && !isLoading) {
+  <!-- This case might be hit if userAddressData$ emits null due to an error -->
+  <p class="error-message">{{ formError }}</p>
+  }
+  } @else if (isLoading) {
+  <!-- Fallback loading message if userAddressData$ hasn't emitted yet and isLoading is true -->
+  <p>Loading addresses...</p>
+  } @else if (formError) {
+  <!-- Fallback error message if userAddressData$ is null due to error and not loading -->
+  <p class="error-message">{{ formError }}</p>
+  }
+
+
+  <!-- Address Form Modal/Section -->
+  @if (showAddressForm) {
+  <div class="address-form-modal-overlay" (click)="closeAddressForm()"></div>
+  <div class="address-form-modal-content">
+    <app-address-form [addressData]="editingAddress"
+                      [formTitle]="editingAddress ? 'Edit Address' : 'Add New Address'"
+                      [submitButtonText]="editingAddress ? 'Update Address' : 'Save Address'"
+                      [isLoading]="isSubmittingForm"
+                      (formSubmit)="handleAddressFormSubmit($event)"
+                      (cancel)="closeAddressForm()">
+    </app-address-form>
+    @if (formError && !isSubmittingForm) { <!-- Show form submission error only if not submitting -->
+    <p class="error-message form-submission-error">{{ formError }}</p>
+    }
+  </div>
+  }
+</div>

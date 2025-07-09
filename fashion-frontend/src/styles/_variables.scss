@@ -1,0 +1,41 @@
+// src/styles/_variables.scss
+
+// ---------------------------
+// COLOR PALETTE
+// ---------------------------
+
+// Using CSS variables for easier use across the app and potential theming
+:root {
+  // Main Theme Colors
+  --primary-color: #b38b59; // A sophisticated gold/bronze
+  --primary-color-hover: #c9a370;
+  --secondary-color: #a0a0a0; // A neutral grey for accents
+  // Text Colors
+  --text-color-dark: #1a1a1a;
+  --text-color-medium: #555;
+  --text-color-light: #888;
+  --text-color-inverted: #ffffff;
+  // Background Colors
+  --background-color: #ffffff;
+  --background-color-light: #f7f7f7; // For components on a white background
+  // Border & Dividers
+  --border-color-light: #e5e5e5;
+  --border-color-dark: #cccccc;
+  // System Colors
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --warning-color: #ffc107;
+}
+
+
+// ---------------------------
+// SASS VARIABLES (for mixins, media queries etc.)
+// ---------------------------
+
+// Breakpoints
+$tablet-breakpoint: 992px;
+$mobile-breakpoint: 768px;
+
+// Other variables
+$border-radius-default: 8px;
+$border-radius-small: 4px;

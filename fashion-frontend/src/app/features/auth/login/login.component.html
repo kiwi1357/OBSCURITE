@@ -1,0 +1,40 @@
+<div class="auth-container">
+  <div class="auth-form-wrapper">
+    <h2>Sign In</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" formControlName="email" placeholder="your@email.com">
+        @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)) {
+        <div class="error-message">
+          @if (loginForm.get('email')?.errors?.['required']) { <small>Email is required.</small> }
+          @if (loginForm.get('email')?.errors?.['email']) { <small>Please enter a valid email.</small> }
+        </div>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" placeholder="Your password">
+        @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)) {
+        <div class="error-message">
+          @if (loginForm.get('password')?.errors?.['required']) { <small>Password is required.</small> }
+        </div>
+        }
+      </div>
+
+      @if (errorMessage) {
+      <div class="error-message server-error">{{ errorMessage }}</div>
+      }
+
+      <button type="submit" class="auth-button" [disabled]="isLoading">
+        {{ isLoading ? 'Signing In...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <a [routerLink]="['/', currentLang, 'forgot-password']">Forgot your password?</a>
+      <p>New to Obscurité? <a [routerLink]="['/', currentLang, 'register']">Create an account</a></p>
+    </div>
+  </div>
+</div>

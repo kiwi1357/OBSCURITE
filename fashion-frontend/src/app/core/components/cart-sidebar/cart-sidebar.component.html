@@ -1,0 +1,98 @@
+<!-- src/app/core/components/cart-sidebar/cart-sidebar.component.html -->
+<div class="cart-sidebar-overlay" (click)="onClose()" [class.visible]="isOpen"></div>
+<aside class="cart-sidebar" [class.is-open]="isOpen">
+  <div class="cart-sidebar-header">
+    <h3>My Shopping Cart ({{ (cart$ | async)?.itemCount || 0 }})</h3>
+    <button class="close-btn" (click)="onClose()" aria-label="Close cart">✕</button>
+  </div>
+
+  <div class="cart-sidebar-content">
+    @if (cart$ | async; as cart) {
+    @if (cart.items && cart.items.length > 0) {
+    <ul class="cart-item-list">
+      @for (item of cart.items; track getCartItemId(item)) {
+      <li class="cart-item">
+        <a [routerLink]="['/', currentLang, 'product', item.productSlug]" (click)="onClose()" class="item-image-link">
+          <img [src]="item.mainImage || '/uploads/placeholder.png'" [alt]="item.name | translate">
+        </a>
+        <div class="item-info-wrapper">
+          <a [routerLink]="['/', currentLang, 'product', item.productSlug]" (click)="onClose()" class="item-name">
+            {{ item.name | translate }}
+          </a>
+          <p class="item-variant-info">
+            Colour: {{ item.variantColorName | translate }} <br>
+            Size: {{ item.size }}
+          </p>
+          <select class="item-quantity-select"
+                  [ngModel]="item.quantity"
+                  (change)="updateQuantity(item, $event)">
+            @for (q of quantityOptions; track q) {
+            <option [value]="q">{{ q }}</option>
+            }
+            @if (item.quantity > 10 && !quantityOptions.includes(item.quantity)) {
+            <option [value]="item.quantity" selected>{{ item.quantity }}</option>
+            }
+          </select>
+        </div>
+        <div class="item-price-actions">
+          <span class="item-price">{{ (item.price * item.quantity) | currency:'EUR' }}</span>
+          <button class="item-remove-btn" (click)="removeItem(item)" aria-label="Remove item">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
+          </button>
+        </div>
+      </li>
+      }
+    </ul>
+    } @else {
+    <div class="empty-cart-message">
+      <svg class="empty-cart-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-1.45-5c.51.68.83 1.49.83 2.38V20H6.35c-.66-1.32-1.82-2.3-3.27-2.65L3 16.5V6H1V4h3l3.6 7.59L7.27 13H17v-2H7.42l-.71-1.43c-.18-.35-.54-.65-.96-.65H3c-.84 0-1.54.64-1.64 1.47L1 10V8h1.5l3.01 6H17c.75 0 1.41-.41 1.75-1.03l3.58-6.49A.996.996 0 0020.01 4H5.21l-.94-2H1v2h2l3.6 7.59L6.34 13H17l-1.45 2zM12 2C9.79 2 8 3.79 8 6s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"></path></svg>
+      <p>CART IS EMPTY</p>
+      <button class="continue-shopping-btn" (click)="onClose()">CONTINUE SHOPPING</button>
+    </div>
+    }
+    } @else {
+    <p>Loading cart...</p>
+    }
+  </div>
+
+  @if (cart$ | async; as cart) {
+  @if (cart.items && cart.items.length > 0) {
+  <div class="cart-sidebar-footer">
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span>{{ cart.subtotal | currency:'EUR' }}</span>
+    </div>
+    @if (cart.appliedPromo && cart.discountAmount > 0) {
+    <div class="summary-row discount-line">
+      <span>Discount ({{ cart.appliedPromo.source.code }})</span>
+      <span>- {{ cart.discountAmount | currency:'EUR' }}</span>
+    </div>
+    }
+    <div class="summary-row">
+      <span>Shipping costs</span>
+      <span class="free-shipping-text">{{ cart.shippingCost === 0 ? 'FREE' : (cart.shippingCost | currency:'EUR') }}</span>
+    </div>
+    <div class="summary-row total-row">
+      <span>Estimated total <small>incl. VAT</small></span>
+      <span>{{ cart.total | currency:'EUR' }}</span>
+    </div>
+
+    <!-- Standard checkout button removed to prioritize PayPal -->
+    <!-- PayPal Button Container -->
+    <div class="paypal-button-wrapper-sidebar">
+      <div #paypalButtonsContainerSidebar class="paypal-button-container">
+        <!-- PayPal buttons will render here. -->
+      </div>
+    </div>
+    @if (isProcessingPayment) {
+    <div class="payment-processing-indicator">
+      Processing PayPal payment...
+    </div>
+    }
+    <!-- End PayPal Button Container -->
+
+    <button class="view-cart-btn" [routerLink]="['/', currentLang, 'cart']" (click)="onClose()">VIEW CART</button>
+  </div>
+  }
+  }
+</aside>

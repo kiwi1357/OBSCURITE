@@ -1,0 +1,44 @@
+<!-- src/app/pages/order-lookup/order-lookup.component.html -->
+<div class="order-lookup-page container">
+  <div class="lookup-container">
+    <div class="lookup-header">
+      <h2>Check your Order Status</h2>
+      <p>To check the status of your order, please enter your Order ID and the email address used for the purchase.</p>
+    </div>
+
+    <form [formGroup]="lookupForm" (ngSubmit)="onLookup()" class="lookup-form">
+      <div class="form-field">
+        <label for="orderId">Order ID</label>
+        <input type="text" id="orderId" formControlName="orderId" placeholder="e.g., ORD-...">
+      </div>
+      <div class="form-field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" formControlName="email" placeholder="you@example.com">
+      </div>
+      <button type="submit" class="button primary" [disabled]="isLoading">
+        {{ isLoading ? 'Searching...' : 'Look Up Order' }}
+      </button>
+    </form>
+
+    @if(isLoading) {
+    <p>Loading order details...</p>
+    }
+  </div>
+
+  <div class="results-container">
+    @if(order$ | async; as order) {
+    <app-order-detail-display [order]="order"></app-order-detail-display>
+    } @else if(errorMessage) {
+    <div class="error-state">
+      <h3>Order Not Found</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+    } @else if (lookupAttempted) {
+    <!-- This case handles when the observable returns null without an error, e.g. 404 -->
+    <div class="error-state">
+      <h3>Order Not Found</h3>
+      <p>We could not find an order matching the details you provided. Please check the information and try again.</p>
+    </div>
+    }
+  </div>
+</div>

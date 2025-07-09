@@ -1,0 +1,202 @@
+// src/app/features/user/pages/address-book/address-book.component.scss
+.address-book-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.address-book-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+
+  h2 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+}
+
+.button { // General button styles, can be global
+  padding: 10px 18px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &.primary {
+    background-color: #000;
+    color: #fff;
+
+    &:hover {
+      background-color: #333;
+    }
+  }
+}
+
+.address-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.address-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 15px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // Pushes actions to bottom
+
+  &.default-shipping, &.default-billing {
+    border-left: 4px solid; // Highlight default
+  }
+
+  &.default-shipping {
+    border-left-color: #007bff;
+  }
+  // Blue for shipping
+  &.default-billing {
+    border-left-color: #28a745;
+  }
+  // Green for billing
+  &.default-shipping.default-billing {
+    // Could use a gradient or a different color if both
+    border-image: linear-gradient(to bottom, #007bff 50%, #28a745 50%) 1;
+  }
+
+
+  .address-card-header {
+    margin-bottom: 10px;
+
+    strong {
+      font-size: 1.1rem;
+    }
+
+    .default-tags {
+      margin-top: 5px;
+
+      .tag {
+        display: inline-block;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+        border-radius: 3px;
+        margin-right: 5px;
+        color: #fff;
+      }
+
+      .default-shipping-tag {
+        background-color: #007bff;
+      }
+
+      .default-billing-tag {
+        background-color: #28a745;
+      }
+    }
+  }
+
+  .address-card-body {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.5;
+    flex-grow: 1; // Allows body to take space before actions
+    p {
+      margin: 3px 0;
+    }
+  }
+
+  .address-card-actions {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    flex-wrap: wrap; // Allow buttons to wrap on small cards
+    gap: 10px;
+
+    .button-link {
+      background: none;
+      border: none;
+      color: #007bff;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.85rem;
+      text-decoration: underline;
+
+      &:hover {
+        color: darken(#007bff, 10%);
+      }
+
+      &.delete {
+        color: #dc3545;
+
+        &:hover {
+          color: darken(#dc3545, 10%);
+        }
+      }
+
+      &.set-default {
+        color: #17a2b8;
+
+        &:hover {
+          color: darken(#17a2b8, 10%);
+        }
+      }
+    }
+  }
+}
+
+.no-addresses-message {
+  text-align: center;
+  padding: 30px;
+  color: #777;
+  font-size: 1.1rem;
+}
+
+// Modal styles for AddressForm
+.address-form-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1010; // Higher than other sidebars
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.address-form-modal-content {
+  position: fixed; // Or use flex centering from overlay
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1011;
+  background-color: #fff;
+  padding: 20px; // Form itself has padding, this is for modal container
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+
+  app-address-form { // Target the component
+    // min-width: 500px; // Ensure form has some width
+  }
+}
+
+.error-message {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.form-submission-error {
+  margin-top: 15px;
+  text-align: center;
+}

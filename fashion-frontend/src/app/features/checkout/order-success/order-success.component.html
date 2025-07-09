@@ -1,0 +1,39 @@
+<!-- src/app/features/checkout/order-success/order-success.component.html -->
+<div class="order-status-page container">
+  <div class="status-icon success-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+    </svg>
+  </div>
+
+  <h1>Thank You For Your Order!</h1>
+
+  <ng-container *ngIf="orderId; else noOrderId">
+    <p class="order-confirmation-message">
+      Your order <strong class="order-id">#{{ orderId }}</strong> has been placed successfully.
+    </p>
+    <p>
+      You will receive an email confirmation shortly with your order details and tracking information once your order has shipped.
+    </p>
+  </ng-container>
+
+  <ng-template #noOrderId>
+    <p class="order-confirmation-message">Your order has been placed successfully.</p>
+    <p>You will receive an email confirmation shortly.</p>
+  </ng-template>
+
+  <div class="actions">
+    <!-- <button (click)="viewOrderDetails()" class="action-button secondary-action">View Order Details</button> -->
+    <button (click)="continueShopping()" class="action-button primary-action">Continue Shopping</button>
+  </div>
+
+  <div class="support-info">
+    <p>
+      If you have any questions about your order, please contact our customer support at
+      <a href="mailto:obscurite.company&#64;gmail.com" title="Email support">obscurite.company&#64;gmail.com</a> or call us at
+      <a href="tel:+1234567890">+1 (234) 567-890</a>.
+    </p>
+
+  </div>
+
+</div>

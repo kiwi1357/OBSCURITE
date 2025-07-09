@@ -1,0 +1,462 @@
+// src/app/features/user/profile/profile.component.scss
+
+// Import a base/variables file if you have one for colors, fonts, etc.
+// @import 'styles/variables';
+
+// General Styles (adjust as needed)
+:host {
+  display: block;
+  font-family: Arial, sans-serif; // Example font
+  color: #333; // Example text color
+}
+
+// Breadcrumb styling (basic, adjust to match your breadcrumb component if needed)
+// The provided BreadcrumbComponent has its own template, so styling it here might be limited
+// or you might need to target its internal elements if it doesn't use ::ng-deep or similar.
+// For the image breadcrumb style: Home • My Account
+// app-breadcrumb { // This will style the host element of app-breadcrumb
+//   display: block;
+//   margin-bottom: 20px;
+//   font-size: 14px;
+//   color: #555;
+//   a {
+//     color: #555;
+//     text-decoration: none;
+//     &:hover {
+//       text-decoration: underline;
+//     }
+//   }
+//   .separator { // Assuming your breadcrumb component has this class for separators
+//     margin: 0 8px;
+//   }
+//   .active-crumb {
+//     font-weight: bold;
+//     color: #000;
+//   }
+// }
+
+.account-dashboard-container {
+  max-width: 1200px; // Adjust as per your site's layout
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.account-main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    color: #000;
+  }
+
+  .logout-link-button {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+}
+
+.account-content-grid {
+  display: flex;
+  gap: 40px; // Space between columns
+
+  .account-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; // Space between sections in a column
+  }
+}
+
+.account-section {
+  border-bottom: 1px solid #e0e0e0; // Line below each section title group
+  padding-bottom: 20px; // Space after the line before content or next section
+
+  &:last-child {
+    border-bottom: none; // No line for the last section in a column
+    padding-bottom: 0;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .section-title-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i { // Placeholder for icon styling
+        font-size: 20px; // Adjust as needed
+        color: #333;
+      }
+
+      h2 {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 0;
+        text-transform: uppercase;
+        color: #000;
+      }
+    }
+
+    .edit-link {
+      font-size: 12px;
+      font-weight: bold;
+      color: #000;
+      text-decoration: underline;
+      text-transform: uppercase;
+    }
+  }
+
+  .section-content {
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 14px;
+
+      .detail-label {
+        font-weight: bold;
+        color: #333;
+      }
+
+      .detail-value {
+        color: #555;
+      }
+    }
+
+    .action-link-inline {
+      font-size: 14px;
+      font-weight: bold;
+      color: #000;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+
+// Specific section styling
+.profile-section {
+  .detail-value {
+    color: #757575; // Slightly lighter for values in profile
+  }
+}
+
+.password-section {
+  .detail-item {
+    align-items: center; // Vertically align label and link
+  }
+}
+
+.preferences-section {
+  .section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .newsletter-promo-box {
+    background-color: #f5f5f5;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+
+    i.icon-newsletter-big { // Placeholder
+      font-size: 30px; // Larger icon
+      color: #333;
+    }
+
+    p {
+      font-size: 14px;
+      margin: 0;
+      max-width: 250px;
+      line-height: 1.4;
+    }
+  }
+
+  .refer-friend-link {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: underline;
+    text-transform: uppercase;
+    cursor: pointer;
+    align-self: flex-start; // As it's below the box
+  }
+}
+
+.address-book-section {
+  .section-content {
+    // Button is full width or as per action-button style
+  }
+}
+
+.order-history-section {
+  .section-header {
+    flex-wrap: wrap; // Allow tabs to wrap if needed on smaller screens
+  }
+
+  .order-tabs {
+    display: flex;
+    gap: 0; // Tabs are joined in the image
+
+    .tab-button {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 8px 15px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #757575;
+      cursor: pointer;
+      text-transform: uppercase;
+
+      &.active {
+        color: #000;
+        border-bottom-color: #000;
+      }
+
+      &:hover:not(.active) {
+        color: #000;
+      }
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    gap: 10px;
+
+    i.icon-cart-big, i.icon-store-big { // Placeholder
+      font-size: 40px; // Large cart icon
+      color: #bdbdbd;
+      margin-bottom: 10px;
+    }
+
+    .empty-state-main-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      margin: 0;
+    }
+
+    .empty-state-sub-text {
+      font-size: 14px;
+      color: #757575;
+      margin: 0 0 15px 0;
+    }
+  }
+}
+
+.action-button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333; // Darken on hover
+  }
+}
+.order-history-section {
+  .section-header {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .section-title-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i {
+        font-size: 20px;
+        color: #333;
+      }
+
+      h2 {
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #000;
+        margin: 0;
+      }
+    }
+  }
+
+  .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .order-summary-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      background-color: #fafafa;
+      transition: box-shadow 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        .order-id {
+          font-weight: bold;
+          font-size: 14px;
+          color: #000;
+        }
+
+        .order-date {
+          font-size: 14px;
+          color: #757575;
+        }
+      }
+
+      .order-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .order-total {
+          font-weight: bold;
+          font-size: 14px;
+          color: #000;
+        }
+
+        .order-status {
+          font-size: 13px;
+          font-weight: 600;
+          padding: 5px 10px;
+          border-radius: 15px;
+          text-transform: capitalize;
+
+          &.shipped {
+            background-color: #e0f7fa;
+            color: #00796b;
+          }
+
+          &.processing {
+            background-color: #fff3e0;
+            color: #ef6c00;
+          }
+
+          &.cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+          }
+          // Add more status classes as needed
+        }
+
+        .view-details-link {
+          font-size: 13px;
+          font-weight: bold;
+          text-decoration: underline;
+          color: #000;
+        }
+      }
+    }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    gap: 10px;
+
+    i.icon-cart-big {
+      font-size: 40px;
+      color: #bdbdbd;
+      margin-bottom: 10px;
+    }
+
+    .empty-state-main-text {
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      margin: 0;
+    }
+
+    .empty-state-sub-text {
+      font-size: 14px;
+      color: #757575;
+      margin: 0 0 15px 0;
+    }
+
+    .action-button {
+      margin-top: 10px;
+    }
+  }
+
+  .error-state {
+    color: #c62828;
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+
+// Icon placeholders - replace with your actual icon library classes or SVG styles
+// Example using Font Awesome (make sure FA is included in your project)
+/*
+.icon-profile::before { content: "\f007"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.icon-preferences::before { content: "\f1de"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.icon-newsletter-big::before { content: "\f0e0"; font-family: "Font Awesome 5 Free"; font-weight: 900; } // envelope
+.icon-address-book::before { content: "\f2b9"; font-family: "Font Awesome 5 Free"; font-weight: 900; }
+.icon-password::before { content: "\f023"; font-family: "Font Awesome 5 Free"; font-weight: 900; } // lock
+.icon-order-history::before { content: "\f1da"; font-family: "Font Awesome 5 Free"; font-weight: 900; } // history
+.icon-cart-big::before { content: "\f07a"; font-family: "Font Awesome 5 Free"; font-weight: 900; } // shopping-cart
+.icon-store-big::before { content: "\f54e"; font-family: "Font Awesome 5 Free"; font-weight: 900; } // store
+*/
+
+// Responsive adjustments (example)
+@media (max-width: 768px) {
+  .account-content-grid {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .order-history-section .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

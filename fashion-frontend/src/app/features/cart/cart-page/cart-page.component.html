@@ -1,0 +1,136 @@
+<!-- src/app/features/cart/cart-page/cart-page.component.html -->
+<div class="cart-page-container container">
+  @if (cart$ | async; as cart) {
+  <h1 class="page-title">MY SHOPPING CART ({{ cart.itemCount }})</h1>
+
+  @if (cart.items && cart.items.length > 0) {
+  <div class="cart-layout">
+    <!-- Left Column: Item List -->
+    <div class="cart-items-column">
+      @for (item of cart.items; track getCartItemId(item)) {
+      <div class="cart-item-card">
+        <a [routerLink]="['/', currentLang, 'product', item.productSlug]" [queryParams]="{variant: item.variantId}" class="item-image-link">
+          <img [src]="item.mainImage || '/uploads/placeholder.png'" [alt]="item.name | translate">
+        </a>
+        <div class="item-details-main">
+          <a [routerLink]="['/', currentLang, 'product', item.productSlug]" [queryParams]="{variant: item.variantId}" class="item-name">
+            {{ item.name | translate }}
+          </a>
+          <p class="item-spec">Colour: {{ item.variantColorName | translate }}</p>
+          <p class="item-spec">Size: {{ item.size }}</p>
+          <p class="item-spec">Style Number: {{ item.sku }}</p>
+          <p class="item-stock-status">
+            <svg viewBox="0 0 16 16" fill="currentColor" class="check-icon"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg>
+            IN STOCK
+          </p>
+          <div class="item-quantity-control">
+            <select class="item-quantity-select"
+                    [ngModel]="item.quantity"
+                    (change)="updateQuantity(item, $event)">
+              @for (q of quantityOptions; track q) {
+              <option [value]="q">{{ q }}</option>
+              }
+              @if (item.quantity > 10 && !quantityOptions.includes(item.quantity)) {
+              <option [value]="item.quantity" selected>{{ item.quantity }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="item-actions-price">
+          <p class="item-price">{{ (item.price * item.quantity) | currency:'EUR' }}</p>
+          <div class="item-action-buttons">
+            <button (click)="navigateToProduct(item)" class="action-icon-btn" aria-label="Edit item">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path></svg>
+            </button>
+            <button (click)="removeItem(item)" class="action-icon-btn" aria-label="Remove item">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div> <!-- /.cart-item-card -->
+      }
+      <button class="continue-shopping-link" (click)="continueShopping()">CONTINUE SHOPPING</button>
+    </div> <!-- /.cart-items-column -->
+    <!-- Right Column: Summary & Actions -->
+    <div class="cart-summary-column">
+      <div class="summary-box">
+        <div class="promo-code-section">
+          <label for="promoCode">Apply a Promo Code</label>
+          <div class="promo-input-group">
+            <input type="text" id="promoCode" name="promoCodeInput" [(ngModel)]="promoCode" placeholder="Enter Promo Code" [disabled]="(appliedPromo$ | async) !== null || isApplyingPromo">
+            <button (click)="applyPromoCode()" [disabled]="isApplyingPromo || (appliedPromo$ | async) !== null || !promoCode.trim()">
+              {{ isApplyingPromo ? 'APPLYING...' : 'APPLY' }}
+            </button>
+          </div>
+          @if (appliedPromo$ | async; as promoDetails) {
+          <div class="applied-promo-info">
+            <span>
+              Code: {{ promoDetails.source.code }} applied!
+              @if(promoDetails.source.discountType === 'percentage'){
+              ({{ promoDetails.source.discountValue }}%)
+              } @else {
+              ({{ promoDetails.source.discountValue | currency:'EUR' }})
+              }
+            </span>
+            <button (click)="removePromo()" class="remove-promo-btn" aria-label="Remove promo code">×</button>
+          </div>
+          }
+          @if (promoError) {
+          <small class="promo-error">{{ promoError }}</small>
+          }
+        </div>
+
+        <div class="cost-summary">
+          <div class="summary-line">
+            <span>SubTotal</span>
+            <span>{{ cart.subtotal | currency:'EUR' }}</span>
+          </div>
+          @if (cart.appliedPromo && cart.discountAmount > 0) {
+          <div class="summary-line discount-line">
+            <span>Discount ({{ cart.appliedPromo.source.code }})</span>
+            <span>- {{ cart.discountAmount | currency:'EUR' }}</span>
+          </div>
+          }
+          <div class="summary-line">
+            <span>Shipping costs</span>
+            @if (cart.shippingCost === 0) {
+            <span class="free-shipping">FREE</span>
+            } @else {
+            <span>{{ cart.shippingCost | currency:'EUR' }}</span>
+            }
+          </div>
+          <hr class="summary-divider">
+          <div class="summary-line total">
+            <span>Estimated total <small>incl. VAT</small></span>
+            <span>{{ cart.total | currency:'EUR' }}</span>
+          </div>
+        </div>
+
+        <!-- Standard "Checkout" button removed -->
+        <!-- PayPal Button Container -->
+        @if (cart.items.length > 0) {
+        <div class="paypal-button-wrapper">
+          <!--<p class="paypal-info-text">Proceed with your order using PayPal. The shipping address will be collected from your PayPal account during checkout.</p>-->
+          <div #paypalButtonsContainer class="paypal-button-container">
+            <!-- PayPal buttons will render here. -->
+          </div>
+        </div>
+        @if (isProcessingPayment) {
+        <div class="payment-processing-indicator">
+          Processing PayPal payment...
+        </div>
+        }
+        }
+      </div> <!-- /.summary-box -->
+    </div> <!-- /.cart-summary-column -->
+  </div> <!-- /.cart-layout -->
+  } @else { <!-- Cart is empty -->
+  <div class="empty-cart-fullpage">
+    <p>Your shopping cart is currently empty.</p>
+    <button class="continue-shopping-link large" (click)="continueShopping()">START SHOPPING</button>
+  </div>
+  }
+  } @else { <!-- Cart observable hasn't emitted yet -->
+  <p>Loading cart details...</p>
+  }
+</div>

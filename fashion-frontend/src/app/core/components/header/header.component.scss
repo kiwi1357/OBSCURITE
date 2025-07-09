@@ -1,0 +1,342 @@
+// src/app/core/components/header/header.component.scss
+@use 'sass:color';
+
+// Variables
+$header-bg-dark: #1A1A1A;
+$header-text-light: #FFFFFF;
+$header-icon-color: #FFFFFF;
+$header-link-hover-color: #A0A0A0; // For text links like "My Account"
+$header-icon-hover-opacity: 0.8; // For icon links
+
+$desktop-search-border-color: #555555;
+$desktop-search-placeholder-color: #888888;
+
+$mobile-breakpoint: 992px;
+
+$cart-count-bg: #d30813; // Example: Puma red or your brand's accent
+$cart-count-text: #FFFFFF;
+
+// --- Thinner Header Adjustments ---
+$desktop-header-height: 60px;
+$mobile-header-height: 50px;
+$icon-base-size: 20px; // Base size for most icons
+$icon-larger-size: 22px; // For icons like menu, search that might be slightly bigger
+
+$logo-font-size-desktop: 1.6rem;
+$logo-font-size-mobile: 1.3rem;
+
+$search-input-font-size: 0.75rem;
+$search-form-padding-desktop: 4px 8px;
+$search-form-min-width-desktop: 220px;
+
+$account-text-font-size: 0.65rem;
+
+$desktop-element-gap: 15px; // Gap between elements in header-right-desktop
+$mobile-element-gap: 6px; // Gap between elements in header-right-mobile/header-left-mobile
+
+$hamburger-padding-desktop: 6px;
+$hamburger-margin-right-desktop: 15px;
+
+$mobile-icon-button-padding: 6px;
+
+
+.app-header-dark {
+  background-color: $header-bg-dark;
+  color: $header-text-light;
+  padding: 0 15px; // Main horizontal padding for the header bar
+  position: sticky; // Make header sticky
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999; // Ensure it's above most other content
+  box-sizing: border-box;
+
+  .icon-svg {
+    display: inline-block;
+    vertical-align: middle;
+    width: $icon-base-size;
+    height: $icon-base-size;
+    color: $header-icon-color; // Default color
+    fill: currentColor; // For SVGs using fill (like menu, search icons provided)
+
+    &[stroke] { // For SVGs using stroke (like wishlist, cart, account icons provided)
+      fill: none;
+      stroke: currentColor; // Use currentColor for stroke too
+    }
+  }
+
+  .icon-search-svg,
+  .icon-menu-svg,
+  .icon-close-svg {
+    width: $icon-larger-size;
+    height: $icon-larger-size;
+  }
+  // --- Desktop ---
+  .header-container-desktop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $desktop-header-height;
+    max-width: 1600px; // Or your site's max content width
+    margin: 0 auto;
+
+    @media (max-width: $mobile-breakpoint) {
+      display: none;
+    }
+
+    .header-left-desktop {
+      display: flex;
+      align-items: center;
+
+      .hamburger-btn-desktop {
+        background: none;
+        border: none;
+        color: $header-icon-color; // Redundant if .icon-svg sets it, but good for explicitness
+        margin-right: $hamburger-margin-right-desktop;
+        cursor: pointer;
+        padding: $hamburger-padding-desktop;
+        display: flex; // For centering SVG if padding is uneven
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-desktop {
+        color: $header-text-light;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: $logo-font-size-desktop;
+        line-height: 1; // Prevent extra space from line height
+      }
+    }
+
+    .header-right-desktop {
+      display: flex;
+      align-items: center;
+      gap: $desktop-element-gap;
+
+      .search-form-desktop {
+        display: flex;
+        align-items: center;
+        border: 1px solid $desktop-search-border-color;
+        padding: $search-form-padding-desktop;
+        min-width: $search-form-min-width-desktop;
+        border-radius: 3px; // Optional: slightly rounded corners
+
+        .search-icon-button {
+          background: none;
+          border: none;
+          color: $header-icon-color;
+          cursor: pointer;
+          padding: 0 5px 0 0; // Space between icon and input
+          display: flex;
+          align-items: center;
+        }
+
+        input[type="text"] {
+          background: transparent;
+          border: none;
+          color: $header-text-light;
+          outline: none;
+          flex-grow: 1;
+          font-size: $search-input-font-size;
+          padding: 4px 0; // Minimal vertical padding for input itself
+
+          &::placeholder {
+            color: $desktop-search-placeholder-color;
+            text-transform: uppercase;
+            opacity: 1; // Ensure placeholder is visible
+          }
+        }
+      }
+      // Common styling for icon-based links/buttons in desktop header right
+      .wishlist-link-desktop,
+      .cart-link-desktop,
+      .login-link-desktop,
+      .account-info-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: $header-text-light;
+        position: relative; // For cart count positioning
+        background: none;
+        border: none;
+        padding: 5px; // Uniform padding for clickable area
+        cursor: pointer;
+        border-radius: 3px; // Subtle rounding
+
+        &:hover {
+          opacity: $header-icon-hover-opacity;
+        }
+      }
+
+      .account-info-link {
+        .icon-svg {
+          margin-right: 6px;
+        }
+      }
+
+      .cart-item-count {
+        position: absolute;
+        top: -2px;
+        right: -5px;
+        background-color: $cart-count-bg;
+        color: $cart-count-text;
+        border-radius: 50%;
+        padding: 0px 5px; // Adjusted padding for better circle with text
+        font-size: 0.6rem; // Smaller font for count
+        font-weight: bold;
+        line-height: 14px; // Adjust to center text vertically in badge
+        min-width: 14px; // Ensure circle shape for single digit
+        height: 14px; // Match min-width for circle
+        text-align: center;
+        box-sizing: border-box;
+        border: 1px solid $header-bg-dark;
+      }
+
+      .account-text {
+        display: flex;
+        flex-direction: column;
+        font-size: $account-text-font-size;
+        line-height: 1.3; // Slightly more line height
+
+        .greeting {
+          color: $header-link-hover-color; // Use the link hover color for "HI, USER"
+        }
+
+        .main-account-link {
+          font-weight: bold;
+          color: $header-text-light; // Ensure this is white
+        }
+      }
+    }
+  }
+  // --- Mobile ---
+  .header-container-mobile {
+    display: none; // Shown via media query
+    justify-content: space-between;
+    align-items: center;
+    height: $mobile-header-height;
+    padding: 0 10px; // Horizontal padding for mobile container
+
+    @media (max-width: $mobile-breakpoint) {
+      display: flex;
+    }
+
+    .icon-button-mobile {
+      background: none;
+      border: none;
+      padding: $mobile-icon-button-padding;
+      cursor: pointer;
+      color: $header-icon-color;
+      position: relative; // For cart count positioning
+      display: flex; // To center SVG if needed
+      align-items: center;
+      justify-content: center;
+
+      .icon-svg { // Ensure SVGs in mobile buttons are consistently sized
+        width: $icon-larger-size;
+        height: $icon-larger-size;
+      }
+    }
+    // Copied from desktop, adjust as needed for mobile
+    .cart-item-count {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      background-color: $cart-count-bg;
+      color: $cart-count-text;
+      border-radius: 50%;
+      padding: 0px 5px;
+      font-size: 0.6rem;
+      font-weight: bold;
+      line-height: 14px;
+      min-width: 14px;
+      height: 14px;
+      text-align: center;
+      box-sizing: border-box;
+      border: 1px solid $header-bg-dark;
+    }
+
+    .logo-mobile {
+      font-size: $logo-font-size-mobile;
+      font-weight: bold;
+      text-decoration: none;
+      color: $header-text-light;
+      // Centering trick for absolute positioned element
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      line-height: $mobile-header-height; // Vertically align with header height
+    }
+
+    .header-left-mobile,
+    .header-right-mobile {
+      display: flex;
+      align-items: center;
+      gap: $mobile-element-gap;
+      flex: 1; // Distribute space
+    }
+
+    .header-left-mobile {
+      justify-content: flex-start;
+    }
+
+    .header-right-mobile {
+      justify-content: flex-end;
+    }
+  }
+  // --- Mobile Search Overlay ---
+  .mobile-search-overlay {
+    position: fixed; // Full screen overlay
+    top: 0;
+    left: 0;
+    z-index: 1000; // Above header
+    width: 100%;
+    height: 100%;
+    background-color: $header-bg-dark; // Same as header
+    padding: 15px;
+    display: flex;
+    flex-direction: column; // Align form at top
+    box-sizing: border-box;
+
+    .mobile-search-form {
+      display: flex;
+      align-items: center;
+      background-color: color.adjust($header-bg-dark, $lightness: 5%); // Slightly lighter than header
+      border-radius: 4px;
+      padding: 5px; // Inner padding for the form
+
+      input[type="text"] {
+        flex-grow: 1;
+        background: transparent;
+        border: none;
+        color: $header-text-light;
+        padding: 10px;
+        font-size: 1rem; // Larger font for mobile search input
+        outline: none;
+
+        &::placeholder {
+          color: $desktop-search-placeholder-color;
+          opacity: 1;
+        }
+      }
+
+      .search-submit-mobile,
+      .close-search-mobile {
+        background: none;
+        border: none;
+        padding: $mobile-icon-button-padding + 2px; // Slightly more padding
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .icon-svg {
+          width: $icon-larger-size;
+          height: $icon-larger-size;
+          color: $header-icon-color;
+        }
+      }
+    }
+  }
+}

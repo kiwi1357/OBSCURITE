@@ -1,0 +1,49 @@
+/* src/app/shared/components/lookbook/lookbook.component.scss */
+:host {
+  display: block;
+  width: 100%;
+  margin: 4rem 0;
+}
+
+.lookbook-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.lookbook-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.lookbook-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 1.5px;
+}
+
+.lookbook-description {
+  font-size: 1.1rem;
+  margin: 0.5rem 0 1.5rem;
+  color: #555;
+}
+
+.explore-button {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: #fff;
+    color: #000;
+  }
+}

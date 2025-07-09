@@ -1,0 +1,373 @@
+// src/app/core/components/cart-sidebar/cart-sidebar.component.scss
+@use 'sass:color';
+
+// --- Variables (Customize these to your project's theme) ---
+$sidebar-bg: #ffffff;
+$text-color-primary: #0d0d0d;
+$text-color-secondary: #585858;
+$text-color-light-grey: #757575;
+$border-color-light: #e5e5e5;
+$border-color-darker: #cccccc;
+
+$button-primary-bg: #000000;
+$button-primary-text: #ffffff;
+$button-paypal-bg: #f0f2f2;
+$button-paypal-border: #c2c2c2;
+$button-view-cart-text: #000000;
+
+$price-color: $text-color-primary;
+// $original-price-color: $text-color-light-grey; // Not used in cart sidebar
+// $discount-color: #e60023; // Not used in cart sidebar
+
+$font-family-main: 'Arial', 'Helvetica Neue', Helvetica, sans-serif; // Replace with actual font
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+$sidebar-width: 420px;
+$sidebar-padding-horizontal: 24px;
+$sidebar-padding-vertical: 20px;
+$item-image-size: 80px;
+
+// --- Mixins ---
+@mixin flex-container($justify: flex-start, $align: stretch, $direction: row, $wrap: nowrap) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}
+
+// --- Base Sidebar Styles ---
+.cart-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0s 0.3s linear;
+
+  &.visible { // This class is toggled by [class.visible]="isOpen" in the template
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+}
+
+.cart-sidebar { // This is the <aside> element
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: $sidebar-width;
+  max-width: calc(100vw - 20px);
+  height: 100%;
+  background-color: $sidebar-bg;
+  box-shadow: -3px 0 15px rgba(0, 0, 0, 0.15);
+  z-index: 1001; // Higher than overlay
+  display: flex;
+  flex-direction: column;
+  font-family: $font-family-main;
+  color: $text-color-primary;
+  transform: translateX(100%); // Initial state: off-screen
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &.is-open { // This class is toggled by [class.is-open]="isOpen" in the template
+    transform: translateX(0); // Slide into view
+  }
+}
+
+// --- Header ---
+.cart-sidebar-header {
+  @include flex-container(space-between, center);
+  padding: ($sidebar-padding-vertical - 5px) $sidebar-padding-horizontal;
+  border-bottom: 1px solid $border-color-light;
+  flex-shrink: 0;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: $font-weight-bold;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    color: $text-color-primary;
+    opacity: 0.7;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// --- Content Area (Item List or Empty Message) ---
+.cart-sidebar-content {
+  flex-grow: 1;
+  overflow-y: auto;
+
+  .empty-cart-message {
+    @include flex-container(center, center, column);
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+    color: $text-color-secondary;
+
+    .empty-cart-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 24px;
+      fill: #cccccc;
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: $font-weight-medium;
+      color: $text-color-primary;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+
+    .continue-shopping-btn {
+      background-color: $button-primary-bg;
+      color: $button-primary-text;
+      border: none;
+      padding: 14px 40px;
+      font-size: 14px;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border-radius: 0;
+
+      &:hover {
+        background-color: lighten($button-primary-bg, 10%);
+      }
+    }
+  }
+}
+
+.cart-item-list {
+  list-style: none;
+  padding: 0 $sidebar-padding-horizontal;
+  margin: 0;
+}
+
+.cart-item {
+  @include flex-container(flex-start, flex-start);
+  padding: $sidebar-padding-vertical 0;
+  border-bottom: 1px solid $border-color-light;
+  gap: 16px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .item-image-link {
+    flex-shrink: 0;
+    display: block;
+    width: $item-image-size;
+    height: $item-image-size;
+    border: 1px solid $border-color-light;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .item-info-wrapper {
+    flex-grow: 1;
+    @include flex-container(flex-start, flex-start, column);
+    gap: 4px;
+  }
+
+  .item-name {
+    font-size: 14px;
+    font-weight: $font-weight-medium;
+    color: $text-color-primary;
+    text-decoration: none;
+    line-height: 1.3;
+    margin-bottom: 2px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .item-variant-info {
+    font-size: 12px;
+    color: $text-color-secondary;
+    line-height: 1.4;
+    margin: 0 0 8px 0;
+
+    span {
+      // font-weight: $font-weight-medium;
+    }
+  }
+
+  .item-quantity-select {
+    margin-top: 8px;
+    padding: 6px 8px;
+    border: 1px solid $border-color-darker;
+    border-radius: 2px;
+    font-size: 13px;
+    background-color: $sidebar-bg;
+    color: $text-color-primary;
+    width: 70px;
+    height: 32px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23333'%3E%3Cpath d='M8 11.293l-4.646-4.647a.5.5 0 0 1 .708-.708L8 9.879l4.94-4.94a.5.5 0 0 1 .707.707L8 11.293z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 10px;
+  }
+
+  .item-price-actions {
+    @include flex-container(space-between, flex-start, column);
+    align-items: flex-end;
+    margin-left: auto;
+    padding-left: 10px;
+    flex-shrink: 0;
+    text-align: right;
+
+    .item-price {
+      font-size: 14px;
+      font-weight: $font-weight-bold;
+      color: $price-color;
+      margin-bottom: 20px;
+    }
+
+    .item-remove-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        fill: $text-color-light-grey;
+      }
+
+      &:hover svg {
+        fill: $text-color-primary;
+      }
+    }
+  }
+}
+
+// --- Footer / Summary ---
+.cart-sidebar-footer {
+  padding: $sidebar-padding-vertical $sidebar-padding-horizontal;
+  border-top: 1px solid $border-color-light;
+  background-color: $sidebar-bg;
+  flex-shrink: 0;
+
+  .summary-row {
+    @include flex-container(space-between, center);
+    font-size: 14px;
+    margin-bottom: 12px;
+    color: $text-color-primary;
+
+    span:first-child {
+      color: $text-color-primary;
+      font-weight: $font-weight-regular;
+    }
+
+    span:last-child {
+      font-weight: $font-weight-medium;
+    }
+
+    &.total-row {
+      font-size: 16px;
+      font-weight: $font-weight-bold;
+      margin-top: 18px;
+      margin-bottom: 20px;
+
+      small {
+        font-size: 11px;
+        font-weight: $font-weight-regular;
+        color: $text-color-light-grey;
+        margin-left: 4px;
+      }
+
+      span:first-child {
+        color: $text-color-primary;
+      }
+    }
+  }
+
+  .checkout-btn, .view-cart-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 0;
+    font-size: 13px;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    @include flex-container(center, center);
+    gap: 8px;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+    svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+  }
+
+  .checkout-btn.primary {
+    background-color: $button-primary-bg;
+    color: $button-primary-text;
+    border: 1px solid $button-primary-bg;
+
+    &:hover {
+      background-color: lighten($button-primary-bg, 10%);
+      border-color: lighten($button-primary-bg, 10%);
+    }
+  }
+
+  .checkout-btn.paypal {
+    background-color: $button-paypal-bg;
+    color: $text-color-primary;
+    border: 1px solid $button-paypal-border;
+
+    img {
+      height: 18px;
+    }
+
+    &:hover {
+      background-color: darken($button-paypal-bg, 2%);
+    }
+  }
+
+  .view-cart-btn {
+    background-color: transparent;
+    color: $button-view-cart-text;
+    border: none;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-weight: $font-weight-medium;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+
+    &:hover {
+      color: lighten($button-view-cart-text, 20%);
+    }
+  }
+}

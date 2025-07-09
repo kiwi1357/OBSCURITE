@@ -1,0 +1,18 @@
+// src/app/features/checkout/order-failed/order-failed.component.scss
+// You can import and adapt styles from order-success.component.scss
+// or define specific styles here. For brevity, let's assume it reuses many.
+@use '../order-success/order-success.component.scss'; // Import styles
+
+// Override or add specific styles for failed page
+.failed-icon {
+  background-color: #f8d7da; // Light red
+  svg {
+    fill: #721c24; // Dark red
+  }
+}
+
+.order-failure-message {
+  font-size: 1.1rem;
+  color: #721c24; // Error color
+  font-weight: 500;
+}

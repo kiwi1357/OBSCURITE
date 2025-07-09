@@ -1,0 +1,437 @@
+// src/app/features/product/product-detail/product-detail.component.scss
+
+// --- Variable Placeholders (Adjust to your theme) ---
+$text-color: #333;
+$primary-color: #000; // Example: Puma black
+$secondary-color: #757575; // Lighter text
+$border-color: #e0e0e0;
+$accent-color-red: #d30813; // Example: Puma red for highlights
+$disabled-color: #c0c0c0;
+$font-family-sans: Arial, sans-serif; // Replace with your actual font
+
+// --- Mixins for reusability ---
+@mixin flex-container($justify: flex-start, $align: stretch, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+// --- General Page Styles ---
+.pdp-page-container {
+  padding-bottom: 40px; // Space for footer
+}
+
+.pdp-main-content { // Wrapper for gallery and details
+  &.container { // If you have a global .container for max-width and centering
+    max-width: 1200px; // Adjust as needed
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.loading-text {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+}
+
+.pdp-layout {
+  @include flex-container(space-between, flex-start);
+  gap: 30px; // Space between gallery and details
+
+  @media (max-width: 992px) { // Tablet and mobile: stack them
+    flex-direction: column;
+  }
+}
+
+// --- Gallery Column (Left) ---
+.gallery-column {
+  flex: 0 0 60%; // Takes up more space, adjust as needed
+  @include flex-container(flex-start, flex-start); // Thumbnails left, Main image right
+  gap: 15px;
+
+  @media (max-width: 992px) {
+    flex-basis: 100%;
+    order: 1; // Show gallery first on mobile
+  }
+
+  @media (max-width: 767px) { // Mobile: Thumbnails below main image
+    flex-direction: column-reverse; // Main image on top, then thumbnails
+  }
+}
+
+.thumbnails-container {
+  @include flex-container(flex-start, flex-start, column);
+  gap: 10px;
+  flex: 0 0 80px; // Width of thumbnail column
+
+  @media (max-width: 767px) { // Mobile: Horizontal scroll for thumbnails
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 10px; // Space for scrollbar
+    width: 100%;
+    flex-basis: auto; // Reset basis
+    justify-content: flex-start;
+
+    .thumbnail-item {
+      flex: 0 0 70px; // Fixed width for horizontal items
+    }
+  }
+}
+
+.thumbnail-item {
+  width: 80px; // Match container width
+  height: 80px;
+  border: 1px solid $border-color;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &.active, &:hover {
+    border-color: $primary-color;
+  }
+}
+
+.main-image-container {
+  flex-grow: 1; // Takes remaining space in gallery column
+  border: 1px solid $border-color;
+
+  img.main-product-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+// --- Details Column (Right) ---
+.details-column {
+  flex: 0 0 37%; // Remaining space, adjust as needed
+  font-family: $font-family-sans;
+  padding-left: 15px; // Some spacing from gallery
+
+  &.sticky {
+    position: sticky;
+    // top: 80px; // Adjust based on your header height for sticky nav
+    // width attribute will be set by JS
+  }
+
+  @media (max-width: 992px) {
+    flex-basis: 100%;
+    order: 2;
+    padding-left: 0; // No padding when stacked
+    &.sticky { // Disable stickiness on smaller screens if it causes issues
+      position: static;
+      top: auto !important; // Override JS style
+      width: auto !important;
+    }
+  }
+
+  .product-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    background-color: $accent-color-red;
+    color: white;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .product-title {
+    font-size: 1.8rem; // Puma uses ~24-28px
+    font-weight: bold; // Or a specific bold weight like 700
+    margin-bottom: 4px;
+    color: $text-color;
+  }
+
+  .product-subtitle {
+    font-size: 1rem;
+    color: $secondary-color;
+    margin-bottom: 16px;
+  }
+
+  .price-section {
+    margin-bottom: 20px;
+
+    .price-original {
+      text-decoration: line-through;
+      color: $secondary-color;
+      font-size: 0.9rem;
+      margin-right: 8px;
+    }
+
+    .price-current {
+      font-size: 1.5rem; // Puma uses ~20px
+      font-weight: bold;
+      color: $text-color; // Or sometimes red for sale
+    }
+
+    .vat-info {
+      font-size: 0.75rem;
+      color: $secondary-color;
+      margin-top: 4px;
+
+      a {
+        color: $secondary-color;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .selector-group {
+    margin-bottom: 24px;
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: $text-color;
+
+      .selected-value {
+        font-weight: normal;
+        color: $secondary-color;
+      }
+    }
+  }
+
+  .size-header {
+    @include flex-container(space-between, center);
+    margin-bottom: 8px;
+
+    label {
+      margin-bottom: 0;
+    }
+  }
+
+  .size-guide-link {
+    font-size: 0.8rem;
+    text-decoration: underline;
+    color: $text-color;
+    font-weight: normal;
+  }
+
+  .swatches {
+    @include flex-container(flex-start, center);
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .swatch {
+      min-width: 40px;
+      height: 40px;
+      padding: 5px;
+      border: 1px solid $border-color;
+      background-color: white;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+      font-size: 0.85rem;
+      @include flex-container(center, center);
+
+      &:hover {
+        border-color: $text-color;
+      }
+
+      &.selected {
+        border-color: $primary-color;
+        border-width: 2px;
+      }
+
+      &:disabled, &.out-of-stock {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: $border-color;
+        text-decoration: line-through; // For out of stock sizes
+        &:hover {
+          border-color: $border-color;
+        }
+      }
+    }
+
+    .color-swatch {
+      width: 50px; // Fixed size for image swatches
+      height: 50px;
+      padding: 2px; // Minimal padding if image has its own whitespace
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .low-stock-warning, .out-of-stock-message {
+    font-size: 0.8rem;
+    color: $accent-color-red;
+    margin-top: 8px;
+    display: block;
+  }
+
+  .quantity-selector-group {
+    margin-bottom: 24px;
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .quantity-input-wrapper {
+      @include flex-container(flex-start, center);
+      border: 1px solid $border-color;
+      width: fit-content;
+
+      button {
+        background: none;
+        border: none;
+        padding: 10px 12px;
+        cursor: pointer;
+        font-size: 1rem;
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      input[type="number"] {
+        width: 40px;
+        text-align: center;
+        border: none;
+        border-left: 1px solid $border-color;
+        border-right: 1px solid $border-color;
+        padding: 10px 0;
+        font-size: 0.9rem;
+        appearance: textfield; // Remove spinner for number input
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .actions-row {
+    @include flex-container(flex-start, center);
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .add-to-cart-btn {
+      flex-grow: 1;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover:not(:disabled) {
+        background-color: darken($primary-color, 10%);
+      }
+
+      &:disabled {
+        background-color: $disabled-color;
+        cursor: not-allowed;
+      }
+    }
+
+    .wishlist-btn {
+      background: none;
+      border: 1px solid $border-color;
+      padding: 10px;
+      cursor: pointer;
+      @include flex-container(center, center);
+
+      svg.icon-heart {
+        width: 24px;
+        height: 24px;
+        stroke: $text-color; // Or a specific wishlist icon color
+      }
+
+      &:hover {
+        border-color: $text-color;
+      }
+      // Add .active class if product is in wishlist
+    }
+  }
+
+  .promo-text, .shipping-promo-text {
+    font-size: 0.8rem;
+    color: $secondary-color;
+    margin-bottom: 10px;
+
+    a {
+      color: $secondary-color;
+      text-decoration: underline;
+    }
+  }
+
+  .product-details-accordion {
+    margin-top: 30px;
+
+    .accordion-item {
+      border-bottom: 1px solid $border-color;
+
+      &:first-child {
+        border-top: 1px solid $border-color;
+      }
+
+      .accordion-header {
+        width: 100%;
+        background: none;
+        border: none;
+        text-align: left;
+        padding: 15px 0;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        @include flex-container(space-between, center);
+        color: $text-color;
+      }
+
+      .accordion-content {
+        padding: 0 0 15px 0; // No horizontal padding if header has none
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: $secondary-color;
+
+        p, ul {
+          margin-bottom: 10px;
+        }
+
+        ul {
+          padding-left: 20px;
+        }
+      }
+    }
+  }
+
+  .product-meta {
+    font-size: 0.85rem;
+    color: $secondary-color;
+    margin-top: 10px;
+
+    a {
+      color: $text-color;
+      text-decoration: underline;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+}
+// End .details-column

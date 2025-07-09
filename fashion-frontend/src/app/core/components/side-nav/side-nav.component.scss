@@ -1,0 +1,147 @@
+// src/app/core/components/side-nav/side-nav.component.scss
+
+// Variables
+$sidenav-bg: #ffffff;
+$sidenav-width: 280px;
+$text-color: #333333;
+$border-color: #e0e0e0;
+$link-hover-bg: #f0f0f0;
+$backdrop-bg: rgba(0, 0, 0, 0.5);
+
+// The backdrop is a sibling to <aside> inside the @if (isOpen) block
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $backdrop-bg;
+  z-index: 1003;
+}
+
+// This is the <aside class="sidenav-container"> element
+.sidenav-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $sidenav-width; // Explicit width
+  max-width: 85vw; // Max for small screens
+  height: 100vh; // Full viewport height
+  background-color: $sidenav-bg; // Must be opaque
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  z-index: 1004; // Above backdrop
+
+  display: flex; // CRITICAL: To enable flex children
+  flex-direction: column; // CRITICAL: Stack panel header/body vertically
+  overflow: hidden; // Hide content that might overflow during transform
+
+  transform: translateX(-100%); // Initial state: off-screen to the left
+  transition: transform 0.3s ease-in-out;
+
+  &.is-open { // Applied by [class.is-open]="isOpen"
+    transform: translateX(0); // Slides into view
+  }
+}
+
+// This is the <div class="panel dynamic-menu-panel"> inside <aside>
+.panel.dynamic-menu-panel {
+  display: flex; // CRITICAL: It's a flex container for its header/body
+  flex-direction: column; // CRITICAL: Stack header and body
+  width: 100%; // CRITICAL: Take full width of .sidenav-container
+  height: 100%; // CRITICAL: Take full height of .sidenav-container
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  border-bottom: 1px solid $border-color;
+  flex-shrink: 0; // Header should not shrink
+
+  .header-spacer { // To balance title when back button isn't there
+    min-width: 40px; // Adjust to match approx width of back/close buttons
+    flex-basis: 40px;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-color;
+    flex-grow: 1;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .back-btn, .close-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 8px;
+    color: $text-color;
+    line-height: 1;
+    min-width: 40px;
+    text-align: center;
+    flex-shrink: 0; // Prevent buttons from shrinking too much
+  }
+
+  .back-btn {
+    text-align: left;
+  }
+
+  .close-btn {
+    font-size: 1.5rem;
+    text-align: right;
+  }
+}
+
+.panel-body {
+  flex-grow: 1; // Body takes all available vertical space
+  overflow-y: auto; // Allow scrolling for long lists
+  padding: 10px 0; // Vertical padding, items will have horizontal
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: $text-color;
+    border-bottom: 1px solid $border-color;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $link-hover-bg;
+    }
+
+    &.view-all-link {
+      font-weight: 500;
+    }
+
+    .chevron {
+      font-size: 0.8em;
+      color: #888888;
+    }
+  }
+
+  li:last-child a {
+    border-bottom: none;
+  }
+
+  .state-message {
+    padding: 20px;
+    text-align: center;
+    color: #777777;
+    font-size: 0.9rem;
+  }
+}
